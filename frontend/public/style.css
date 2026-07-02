@@ -850,6 +850,33 @@ body {
   text-shadow: 0 0 18px rgba(255, 123, 28, 0.5);
   transform: rotate(-3deg);
   transform-origin: left;
+  margin-bottom: 24px;
+}
+
+/* Glowing "Connect With Me" button */
+.connect-btn {
+  display: inline-block;
+  padding: 14px 34px;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  color: #0a0705;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+  border-radius: 999px;
+  box-shadow: 0 0 18px rgba(255, 123, 28, 0.45), 0 0 44px rgba(255, 179, 64, 0.2);
+  animation: connectGlow 2.2s ease-in-out infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.connect-btn:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 0 30px rgba(255, 123, 28, 0.8), 0 0 70px rgba(255, 179, 64, 0.4), 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation-play-state: paused;
+}
+@keyframes connectGlow {
+  0%, 100% { box-shadow: 0 0 14px rgba(255, 123, 28, 0.35), 0 0 36px rgba(255, 179, 64, 0.15); }
+  50%      { box-shadow: 0 0 28px rgba(255, 123, 28, 0.7), 0 0 60px rgba(255, 179, 64, 0.35); }
 }
 
 /* ---------- Phone login modal ---------- */

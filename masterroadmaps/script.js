@@ -170,13 +170,30 @@ async function generateRoadmap() {
   renderRoadmap();
 }
 
-// Toggle loading state on the generate button
+// Toggle loading state on the generate button (with rotating messages)
+const loadingMessages = [
+  'Analyzing your skill…',
+  'Designing your 30-day plan…',
+  'Adding daily tasks & projects…',
+  'Almost ready…',
+];
+let loadingMsgTimer = null;
+
 function setLoading(isLoading) {
   generateBtn.disabled = isLoading;
   generateBtn.classList.toggle('loading', isLoading);
-  generateBtn.querySelector('.btn-text').textContent = isLoading
-    ? 'Generating your roadmap…'
-    : 'Generate My Roadmap';
+  const btnText = generateBtn.querySelector('.btn-text');
+  clearInterval(loadingMsgTimer);
+  if (isLoading) {
+    let i = 0;
+    btnText.textContent = loadingMessages[0];
+    loadingMsgTimer = setInterval(() => {
+      i = Math.min(i + 1, loadingMessages.length - 1);
+      btnText.textContent = loadingMessages[i];
+    }, 3000);
+  } else {
+    btnText.textContent = 'Generate My Roadmap';
+  }
 }
 
 /* ============================================================

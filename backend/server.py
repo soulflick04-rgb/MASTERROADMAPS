@@ -111,7 +111,7 @@ async def generate_roadmap(req: RoadmapRequest):
         api_key=os.environ['EMERGENT_LLM_KEY'],
         session_id=f"roadmap-{uuid.uuid4()}",
         system_message=SYSTEM_MESSAGE,
-    ).with_model("openai", "gpt-5.4")
+    ).with_model("openai", "gpt-5.4-mini")
 
     prompt = PROMPT_TEMPLATE.format(skill=skill, intensity=req.intensity)
 
