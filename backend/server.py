@@ -31,6 +31,24 @@ class RoadmapRequest(BaseModel):
     intensity: str
 
 
+class LeadRequest(BaseModel):
+    phone: str
+    skill: str = ""
+
+
+@api_router.post("/leads")
+async def save_lead(req: LeadRequest):
+    phone = re.sub(r'[\s\-]', '', req.phone).removeprefix('+91')
+    if not re.fullmatch(r'[6-9]\d{9}', phone):
+        raise HTTPException(status_code=400, detail="Please enter a valid Indian mobile number.")
+    await db.leads.insert_one({
+        "id": str(uuid.uuid4()),
+        "phone": phone,
+        "skill": req.skill,
+    })
+    return {"success": True}
+
+
 SYSTEM_MESSAGE = """You are MasterRoadmaps, an expert learning-plan designer.
 You create realistic, extreme-focus 30-day learning roadmaps.
 Never make fake promises like "become an expert in 30 days" — the goal is maximum realistic progress.

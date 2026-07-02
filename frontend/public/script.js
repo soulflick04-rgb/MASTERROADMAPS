@@ -321,14 +321,177 @@ function copyRoadmap() {
 
 function downloadRoadmap() {
   if (!currentData) return;
-  const blob = new Blob([buildRoadmapText()], { type: 'text/plain' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  // File name: "[skill]-30-day-roadmap.txt"
-  link.download = `${currentSkill.toLowerCase().replace(/\s+/g, '-')}-30-day-roadmap.txt`;
-  link.click();
-  URL.revokeObjectURL(link.href);
-  showToast('↓ Roadmap downloaded!');
+  // Phone-gate: ask for the number once, remember it with localStorage
+  if (!localStorage.getItem('mr_phone')) {
+    openPhoneModal();
+    return;
+  }
+  generatePDF();
+}
+
+/* ============================================================
+   PHONE LOGIN MODAL (India numbers only) — gates the PDF
+   ============================================================ */
+const phoneModal = document.getElementById('phoneModal');
+const phoneInput = document.getElementById('phoneInput');
+const phoneError = document.getElementById('phoneError');
+
+function openPhoneModal() {
+  phoneModal.classList.add('show');
+  phoneError.classList.remove('show');
+  setTimeout(() => phoneInput.focus(), 150);
+}
+
+function closePhoneModal() {
+  phoneModal.classList.remove('show');
+  phoneError.classList.remove('show');
+}
+
+// Validate + save the phone number, then start the PDF download
+async function submitPhone() {
+  // Keep digits only, drop an optional +91 prefix
+  const phone = phoneInput.value.replace(/[\s\-]/g, '').replace(/^\+?91/, '');
+
+  // Indian mobile numbers: 10 digits, starting with 6-9
+  if (!/^[6-9]\d{9}$/.test(phone)) {
+    phoneError.classList.remove('show');
+    void phoneError.offsetWidth; // restart the shake animation
+    phoneError.classList.add('show');
+    return;
+  }
+
+  const submitBtn = document.getElementById('phoneSubmitBtn');
+  submitBtn.disabled = true;
+
+  // Save the lead to the backend (best effort — works offline too)
+  try {
+    await fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: phone, skill: currentSkill }),
+    });
+  } catch (err) { /* static hosting: still allow the download */ }
+
+  localStorage.setItem('mr_phone', phone);
+  submitBtn.disabled = false;
+  closePhoneModal();
+  showToast('✓ Unlocked! Downloading your PDF…');
+  generatePDF();
+}
+
+// Allow only digits in the phone input + Enter to submit
+phoneInput.addEventListener('input', () => {
+  phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+});
+phoneInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitPhone();
+});
+// Click outside the card closes the modal
+phoneModal.addEventListener('click', e => {
+  if (e.target === phoneModal) closePhoneModal();
+});
+
+/* ============================================================
+   PDF GENERATION (jsPDF, fully client-side)
+   ============================================================ */
+function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 48;
+  let y = 0;
+
+  const ORANGE = [255, 123, 28];
+  const AMBER = [255, 179, 64];
+  const DARK = [26, 18, 12];
+  const GREY = [110, 95, 82];
+
+  // Add a new page when we run out of space
+  function checkPage(needed) {
+    if (y + needed > pageH - margin) {
+      doc.addPage();
+      y = margin;
+    }
+  }
+
+  // Write one wrapped block of text
+  function writeText(text, size, style, color, indent, gap) {
+    doc.setFont('helvetica', style);
+    doc.setFontSize(size);
+    doc.setTextColor(color[0], color[1], color[2]);
+    const lines = doc.splitTextToSize(String(text), pageW - margin * 2 - indent);
+    lines.forEach(line => {
+      checkPage(size + 5);
+      doc.text(line, margin + indent, y);
+      y += size + 5;
+    });
+    y += gap;
+  }
+
+  // Section heading with an orange underline
+  function writeHeading(title) {
+    checkPage(46);
+    y += 10;
+    writeText(title, 14, 'bold', ORANGE, 0, 2);
+    doc.setDrawColor(ORANGE[0], ORANGE[1], ORANGE[2]);
+    doc.setLineWidth(1.2);
+    doc.line(margin, y - 8, margin + 70, y - 8);
+    y += 6;
+  }
+
+  // ---- Header banner ----
+  doc.setFillColor(12, 8, 5);
+  doc.rect(0, 0, pageW, 96, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(21);
+  doc.setTextColor(ORANGE[0], ORANGE[1], ORANGE[2]);
+  doc.text('MASTERROADMAPS', margin, 44);
+  doc.setFontSize(11);
+  doc.setTextColor(AMBER[0], AMBER[1], AMBER[2]);
+  doc.text(`30-Day Extreme Roadmap  |  ${currentSkill.toUpperCase()}  |  ${currentIntensity}`, margin, 68);
+  y = 126;
+
+  writeText(currentData.motivation || '', 11, 'italic', GREY, 0, 8);
+
+  // ---- Phases ----
+  currentData.phases.forEach((phase, i) => {
+    writeHeading(`PHASE ${i + 1}: ${phase.days} — ${phase.name}`);
+    writeText(`Goal: ${phase.goal}`, 10.5, 'bolditalic', DARK, 0, 4);
+    phase.tasks.forEach(t => writeText(`•  ${t}`, 10.5, 'normal', DARK, 10, 0));
+    y += 6;
+  });
+
+  // ---- Timetable ----
+  writeHeading(`DAILY TIMETABLE (${currentIntensity})`);
+  getTimetable(currentIntensity).forEach(row =>
+    writeText(`${row.time}  —  ${row.task}`, 10.5, 'normal', DARK, 10, 0));
+  y += 6;
+
+  // ---- Resources ----
+  writeHeading('FREE RESOURCES');
+  currentData.resources.forEach(r =>
+    writeText(`${r.label}: ${r.text}`, 10.5, 'normal', DARK, 10, 0));
+  y += 6;
+
+  // ---- Projects ----
+  writeHeading('PROJECT IDEAS');
+  currentData.projects.forEach(p =>
+    writeText(`${p.label}: ${p.text}`, 10.5, 'normal', DARK, 10, 0));
+  y += 6;
+
+  // ---- Expected results ----
+  writeHeading('EXPECTED FINAL RESULT');
+  writeText(`Minimum: ${currentData.results.minimum}`, 10.5, 'normal', DARK, 10, 0);
+  writeText(`Good: ${currentData.results.good}`, 10.5, 'normal', DARK, 10, 0);
+  writeText(`Extreme: ${currentData.results.extreme}`, 10.5, 'normal', DARK, 10, 4);
+
+  writeText('Disclaimer: Result depends on your consistency, starting level, daily time, and quality of practice.', 9, 'italic', GREY, 0, 10);
+  writeText('MasterRoadmaps — No excuses, only execution.   |   Created by Rishi Srivastav', 9.5, 'bold', ORANGE, 0, 0);
+
+  // File name: "[skill]-30-day-roadmap.pdf"
+  doc.save(`${currentSkill.toLowerCase().replace(/\s+/g, '-')}-30-day-roadmap.pdf`);
+  showToast('↓ PDF downloaded!');
 }
 
 function resetRoadmap() {

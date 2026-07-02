@@ -7,7 +7,7 @@
   <meta name="description" content="Get an extreme 30-day roadmap, daily timetable, free resources, project ideas, and realistic final outcomes for any skill." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Great+Vibes&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -28,6 +28,7 @@
       </a>
       <div class="nav-links">
         <a href="#how-it-works" data-testid="nav-how-link">How it works</a>
+        <a href="#about" data-testid="nav-about-link">About</a>
         <a href="#hero" class="nav-cta" data-testid="nav-cta-btn">Start now</a>
       </div>
     </div>
@@ -138,7 +139,7 @@
     <!-- 8. Action buttons -->
     <div class="action-row" data-testid="action-buttons">
       <button class="action-btn" onclick="copyRoadmap()" data-testid="copy-roadmap-btn">⧉ Copy Roadmap</button>
-      <button class="action-btn" onclick="downloadRoadmap()" data-testid="download-roadmap-btn">↓ Download as Text</button>
+      <button class="action-btn" onclick="downloadRoadmap()" data-testid="download-roadmap-btn">↓ Download PDF</button>
       <button class="action-btn" onclick="regenerateRoadmap()" data-testid="regenerate-roadmap-btn">↻ Regenerate</button>
       <button class="action-btn danger" onclick="resetRoadmap()" data-testid="reset-roadmap-btn">✕ Reset</button>
     </div>
@@ -174,6 +175,29 @@
     </div>
   </section>
 
+  <!-- ABOUT THE CREATOR -->
+  <section class="about-section" id="about" data-testid="about-section">
+    <p class="section-eyebrow reveal">THE CREATOR</p>
+    <h2 class="section-title reveal">About Me</h2>
+    <div class="about-card glass reveal" data-testid="about-card">
+      <div class="about-photo-wrap">
+        <img src="creator.png" alt="Rishi Srivastav" class="about-photo" data-testid="creator-photo" />
+      </div>
+      <div class="about-content">
+        <h3 class="about-name" data-testid="creator-name">Rishi Srivastav</h3>
+        <p class="about-role">Creator of MasterRoadmaps</p>
+        <p class="about-text" data-testid="creator-words">
+          Hi, I'm Rishi — I built MasterRoadmaps because I believe anyone can make serious
+          progress in any skill with 30 days of focused, honest effort.
+          No shortcuts, no fake promises — just a clear plan, daily execution,
+          and real output at the end. If this roadmap helps you move even one step
+          forward, it has done its job. Now stop scrolling and start Day 1.
+        </p>
+        <p class="about-sign" data-testid="creator-sign">Rishi Srivastav</p>
+      </div>
+    </div>
+  </section>
+
   <!-- 11. FOOTER -->
   <footer class="footer" data-testid="footer">
     <div class="footer-logo"><span class="logo-mark">◆</span> Master<span class="logo-accent">Roadmaps</span></div>
@@ -184,6 +208,33 @@
   <!-- Toast notification -->
   <div class="toast" id="toast" data-testid="toast"></div>
 
+  <!-- Phone login modal (gates the PDF download) -->
+  <div class="modal-overlay" id="phoneModal" data-testid="phone-modal">
+    <div class="modal-card glass">
+      <button class="modal-close" onclick="closePhoneModal()" data-testid="phone-modal-close">✕</button>
+      <div class="modal-icon">🔒</div>
+      <h3 class="modal-title">Unlock Your PDF</h3>
+      <p class="modal-sub">Enter your mobile number to download the roadmap as a PDF. India numbers only.</p>
+      <div class="phone-input-row">
+        <span class="phone-prefix">+91</span>
+        <input
+          type="tel"
+          id="phoneInput"
+          data-testid="phone-input"
+          placeholder="10-digit mobile number"
+          maxlength="10"
+          inputmode="numeric"
+        />
+      </div>
+      <div class="phone-error" id="phoneError" data-testid="phone-error">Please enter a valid Indian mobile number.</div>
+      <button class="generate-btn modal-submit" id="phoneSubmitBtn" onclick="submitPhone()" data-testid="phone-submit-btn">
+        <span class="btn-text">Unlock &amp; Download PDF</span>
+      </button>
+      <p class="modal-note">We only use your number to know who's using MasterRoadmaps. No spam.</p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

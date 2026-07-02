@@ -20,11 +20,13 @@ Students, working professionals, self-learners wanting fast structured progress 
 - All 11 spec sections: hero + input + intensity selector + chips, how-it-works cards, animated result reveal (phases, timetable, resources, projects, expected results + disclaimer), action buttons (copy/download/reset/regenerate), empty-input warning, footer, toast.
 - AI generation with skill-specific content, ~15s response; template fallback.
 - Tested by testing agent: 100% backend, 100% frontend (iteration_1.json).
+- v2 (June 2026): Black + orange/amber theme (replaced green/cyan). About the Creator section (Rishi Srivastav, placeholder RS avatar creator.png — user to replace with real photo, bio + script-font signature). "Download PDF" (jsPDF client-side, styled) gated by phone-number modal: India-only validation (+91, 10 digits starting 6-9), saved to Mongo `leads` collection via POST /api/leads, remembered in localStorage. Verified e2e via browser automation.
 
 ## Backlog
+- P0: Replace creator.png with Rishi's real photo when he uploads it
 - P1: Toast/explanation when AI fails and template fallback is used
-- P2: Per-day (day 1–30) expanded task view; save/share roadmap links; PDF export
-- P2: Migrate deprecated @app.on_event to lifespan handler
+- P2: Per-day (day 1–30) expanded task view; save/share roadmap links
+- P2: Migrate deprecated @app.on_event to lifespan handler; admin view of collected leads
 
 ## Test Credentials
 None — no auth.
