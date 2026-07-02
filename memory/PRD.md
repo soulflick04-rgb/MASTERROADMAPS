@@ -20,7 +20,8 @@ Students, working professionals, self-learners wanting fast structured progress 
 - All 11 spec sections: hero + input + intensity selector + chips, how-it-works cards, animated result reveal (phases, timetable, resources, projects, expected results + disclaimer), action buttons (copy/download/reset/regenerate), empty-input warning, footer, toast.
 - AI generation with skill-specific content, ~15s response; template fallback.
 - Tested by testing agent: 100% backend, 100% frontend (iteration_1.json).
-- v2 (June 2026): Black + orange/amber theme (replaced green/cyan). About the Creator section (Rishi Srivastav, placeholder RS avatar creator.png — user to replace with real photo, bio + script-font signature). "Download PDF" (jsPDF client-side, styled) gated by phone-number modal: India-only validation (+91, 10 digits starting 6-9), saved to Mongo `leads` collection via POST /api/leads, remembered in localStorage. Verified e2e via browser automation.
+- v2 (June 2026): Black + orange/amber theme (replaced green/cyan). About the Creator section (Rishi Srivastav, real photo creator.png, bio + script-font signature). "Download PDF" (jsPDF client-side, styled) gated by phone-number modal: India-only validation (+91, 10 digits starting 6-9), saved to Mongo `leads` collection via POST /api/leads, remembered in localStorage. Verified e2e via browser automation.
+- v3 (June 2026): Speed fix — model switched gpt-5.4 → gpt-5.4-mini (~15s → ~7-9s, testing agent measured 6.6-8.5s). Rotating loading messages on generate button. Glowing "Connect With Me" mailto button (srivastavrishi267@gmail.com) in About section. Testing agent iteration_2: 100% pass.
 
 ## Backlog
 - P0: Replace creator.png with Rishi's real photo when he uploads it
