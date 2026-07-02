@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MasterRoadmaps — Master Any Skill in 30 Days</title>
+  <meta name="description" content="Get an extreme 30-day roadmap, daily timetable, free resources, project ideas, and realistic final outcomes for any skill." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated background layers -->
+  <div class="bg-gradient" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+  <div id="particles" aria-hidden="true"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="logo" data-testid="nav-logo">
+        <span class="logo-mark">◆</span> Master<span class="logo-accent">Roadmaps</span>
+      </a>
+      <div class="nav-links">
+        <a href="#how-it-works" data-testid="nav-how-link">How it works</a>
+        <a href="#hero" class="nav-cta" data-testid="nav-cta-btn">Start now</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 1. HERO SECTION -->
+  <header class="hero" id="hero">
+    <div class="hero-badge reveal-on-load" data-testid="hero-badge">
+      <span class="pulse-dot"></span> 30-DAY EXTREME LEARNING SYSTEM
+    </div>
+
+    <h1 class="hero-title reveal-on-load delay-1" data-testid="hero-title">
+      Master Any Skill<br /><span class="glow-text">in 30 Days</span>
+    </h1>
+
+    <p class="hero-subtitle reveal-on-load delay-2" data-testid="hero-subtitle">
+      Get an extreme 30-day roadmap, daily timetable, free resources,
+      project ideas, and realistic final outcomes for any skill.
+    </p>
+
+    <!-- Generator form -->
+    <div class="generator-card glass reveal-on-load delay-3" data-testid="generator-card">
+      <div class="input-row">
+        <input
+          type="text"
+          id="skillInput"
+          data-testid="skill-input"
+          placeholder="Type a skill, e.g. magic, coding, video editing…"
+          autocomplete="off"
+        />
+      </div>
+
+      <!-- Intensity selector -->
+      <div class="intensity-row" role="radiogroup" aria-label="Daily intensity">
+        <span class="intensity-label">INTENSITY</span>
+        <div class="intensity-options">
+          <button class="intensity-btn" data-value="1 hour/day" data-testid="intensity-1h">1 hour/day</button>
+          <button class="intensity-btn active" data-value="2 hours/day" data-testid="intensity-2h">2 hours/day</button>
+          <button class="intensity-btn extreme" data-value="4 hours/day Extreme" data-testid="intensity-4h">4 hours/day ⚡ Extreme</button>
+        </div>
+      </div>
+
+      <button class="generate-btn" id="generateBtn" data-testid="generate-btn" onclick="generateRoadmap()">
+        <span class="btn-text">Generate My Roadmap</span>
+        <span class="btn-loader" aria-hidden="true"></span>
+      </button>
+
+      <!-- Warning message for empty input -->
+      <div class="warning-msg" id="warningMsg" data-testid="warning-msg">⚠ Please enter a skill first.</div>
+
+      <p class="trust-text" data-testid="trust-text">Built for students, working professionals, and self-learners.</p>
+    </div>
+
+    <!-- 10. Sample skill chips -->
+    <div class="chips-row reveal-on-load delay-4" data-testid="skill-chips">
+      <button class="chip" onclick="fillSkill('Web Development')" data-testid="chip-web-development">Web Development</button>
+      <button class="chip" onclick="fillSkill('Video Editing')" data-testid="chip-video-editing">Video Editing</button>
+      <button class="chip" onclick="fillSkill('Excel')" data-testid="chip-excel">Excel</button>
+      <button class="chip" onclick="fillSkill('Public Speaking')" data-testid="chip-public-speaking">Public Speaking</button>
+      <button class="chip" onclick="fillSkill('Magic')" data-testid="chip-magic">Magic</button>
+      <button class="chip" onclick="fillSkill('Graphic Design')" data-testid="chip-graphic-design">Graphic Design</button>
+      <button class="chip" onclick="fillSkill('AI Tools')" data-testid="chip-ai-tools">AI Tools</button>
+      <button class="chip" onclick="fillSkill('Fitness')" data-testid="chip-fitness">Fitness</button>
+    </div>
+  </header>
+
+  <!-- 2. HOW IT WORKS SECTION -->
+  <section class="how-section" id="how-it-works">
+    <p class="section-eyebrow reveal">THE SYSTEM</p>
+    <h2 class="section-title reveal">How it works</h2>
+    <div class="how-grid">
+      <div class="how-card glass reveal" data-testid="how-card-1">
+        <div class="how-num">01</div>
+        <div class="how-icon">⌨</div>
+        <h3>Type Any Skill</h3>
+        <p>Enter whatever you want to learn, from coding to magic to public speaking.</p>
+      </div>
+      <div class="how-card glass reveal" data-testid="how-card-2">
+        <div class="how-num">02</div>
+        <div class="how-icon">🗺</div>
+        <h3>Get a 30-Day Plan</h3>
+        <p>Receive a focused roadmap divided into phases, daily practice, and project tasks.</p>
+      </div>
+      <div class="how-card glass reveal" data-testid="how-card-3">
+        <div class="how-num">03</div>
+        <div class="how-icon">◆</div>
+        <h3>Build Real Output</h3>
+        <p>Follow the plan and finish with practical projects or visible results.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3-8. RESULT SECTION (hidden until generated) -->
+  <section class="result-section" id="resultSection" data-testid="result-section">
+
+    <!-- Roadmap header -->
+    <div class="result-header">
+      <p class="section-eyebrow">YOUR PERSONAL PLAN</p>
+      <h2 class="result-skill" id="resultSkill" data-testid="result-skill-name"></h2>
+      <div class="result-meta">
+        <span class="meta-pill" id="resultIntensity" data-testid="result-intensity"></span>
+        <span class="meta-pill">30 DAYS</span>
+        <span class="meta-pill" id="resultMode" data-testid="result-mode"></span>
+      </div>
+      <p class="motivation-line" id="motivationLine" data-testid="motivation-line"></p>
+    </div>
+
+    <!-- 8. Action buttons -->
+    <div class="action-row" data-testid="action-buttons">
+      <button class="action-btn" onclick="copyRoadmap()" data-testid="copy-roadmap-btn">⧉ Copy Roadmap</button>
+      <button class="action-btn" onclick="downloadRoadmap()" data-testid="download-roadmap-btn">↓ Download as Text</button>
+      <button class="action-btn" onclick="regenerateRoadmap()" data-testid="regenerate-roadmap-btn">↻ Regenerate</button>
+      <button class="action-btn danger" onclick="resetRoadmap()" data-testid="reset-roadmap-btn">✕ Reset</button>
+    </div>
+
+    <!-- Phases (filled by JS) -->
+    <div class="phases-wrap" id="phasesWrap" data-testid="phases-container"></div>
+
+    <!-- 4. Daily timetable -->
+    <div class="sub-section">
+      <h3 class="sub-title"><span class="sub-icon">⏱</span> Daily Timetable</h3>
+      <div class="timetable glass" id="timetableWrap" data-testid="timetable-container"></div>
+    </div>
+
+    <!-- 5. Free resources -->
+    <div class="sub-section">
+      <h3 class="sub-title"><span class="sub-icon">⚑</span> Free Resources</h3>
+      <div class="resources-grid" id="resourcesWrap" data-testid="resources-container"></div>
+    </div>
+
+    <!-- 6. Project ideas -->
+    <div class="sub-section">
+      <h3 class="sub-title"><span class="sub-icon">▲</span> Project Ideas</h3>
+      <div class="projects-grid" id="projectsWrap" data-testid="projects-container"></div>
+    </div>
+
+    <!-- 7. Expected final result -->
+    <div class="sub-section">
+      <h3 class="sub-title"><span class="sub-icon">★</span> Expected Final Result</h3>
+      <div class="results-grid" id="resultsWrap" data-testid="results-container"></div>
+      <p class="disclaimer" data-testid="disclaimer-text">
+        Result depends on your consistency, starting level, daily time, and quality of practice.
+      </p>
+    </div>
+  </section>
+
+  <!-- 11. FOOTER -->
+  <footer class="footer" data-testid="footer">
+    <div class="footer-logo"><span class="logo-mark">◆</span> Master<span class="logo-accent">Roadmaps</span></div>
+    <p class="footer-main">MasterRoadmaps — Built for students, workers, and self-learners.</p>
+    <p class="footer-small">Make maximum progress in 30 days. No excuses, only execution.</p>
+  </footer>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" data-testid="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
