@@ -862,6 +862,8 @@ body {
   font-weight: 700;
   letter-spacing: 0.5px;
   text-decoration: none;
+  border: none;
+  cursor: pointer;
   color: #0a0705;
   background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
   border-radius: 999px;
@@ -877,6 +879,21 @@ body {
 @keyframes connectGlow {
   0%, 100% { box-shadow: 0 0 14px rgba(255, 123, 28, 0.35), 0 0 36px rgba(255, 179, 64, 0.15); }
   50%      { box-shadow: 0 0 28px rgba(255, 123, 28, 0.7), 0 0 60px rgba(255, 179, 64, 0.35); }
+}
+.connect-wrap { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.connect-email {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+.connect-email:hover { color: var(--neon-green); }
+.copy-hint {
+  font-size: 0.66rem;
+  letter-spacing: 1px;
+  opacity: 0.6;
+  margin-left: 6px;
 }
 
 /* ---------- Phone login modal ---------- */

@@ -528,6 +528,26 @@ function regenerateRoadmap() {
 }
 
 /* ============================================================
+   CONNECT WITH ME — opens Gmail compose to the creator's email
+   ============================================================ */
+const CREATOR_EMAIL = 'srivastavrishi267@gmail.com';
+
+function connectWithMe() {
+  const subject = encodeURIComponent('Hello Rishi — from MasterRoadmaps');
+  const body = encodeURIComponent('Hi Rishi,\n\nI found you through MasterRoadmaps and wanted to connect!\n\n');
+  // Gmail compose works in any browser, even without a mail app installed
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${CREATOR_EMAIL}&su=${subject}&body=${body}`;
+  window.open(gmailUrl, '_blank', 'noopener');
+  showToast('✉ Opening email to ' + CREATOR_EMAIL);
+}
+
+function copyEmail() {
+  navigator.clipboard.writeText(CREATOR_EMAIL)
+    .then(() => showToast('⧉ Email copied: ' + CREATOR_EMAIL))
+    .catch(() => showToast(CREATOR_EMAIL));
+}
+
+/* ============================================================
    UI HELPERS
    ============================================================ */
 // 10. Skill chips fill the input box

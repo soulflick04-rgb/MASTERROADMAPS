@@ -194,9 +194,14 @@
           forward, it has done its job. Now stop scrolling and start Day 1.
         </p>
         <p class="about-sign" data-testid="creator-sign">Rishi Srivastav</p>
-        <a href="mailto:srivastavrishi267@gmail.com?subject=Hello%20Rishi%20—%20from%20MasterRoadmaps" class="connect-btn" data-testid="connect-btn">
-          ✉ &nbsp;Connect With Me
-        </a>
+        <div class="connect-wrap">
+          <button class="connect-btn" onclick="connectWithMe()" data-testid="connect-btn">
+            ✉ &nbsp;Connect With Me
+          </button>
+          <p class="connect-email" onclick="copyEmail()" data-testid="connect-email" title="Click to copy">
+            srivastavrishi267@gmail.com <span class="copy-hint">⧉ tap to copy</span>
+          </p>
+        </div>
       </div>
     </div>
   </section>
