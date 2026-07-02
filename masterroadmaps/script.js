@@ -2,19 +2,16 @@
    MasterRoadmaps — script.js
    Generates a 30-day learning roadmap for any skill.
 
-   How generation works:
-   1. First we try the AI backend (POST /api/generate-roadmap)
-      for a fully personalized roadmap.
-   2. If the backend is not available (e.g. the site is hosted
-      as pure static files on GitHub Pages / Netlify), we fall
-      back to smart built-in templates, so the site ALWAYS works.
+   100% static: no backend, no API, no database.
+   The skill you type is inserted into smart roadmap templates,
+   so everything works instantly and offline — perfect for
+   GitHub Pages or Netlify.
    ============================================================ */
 
 // ---------- State ----------
 let currentSkill = '';                 // the skill the user typed
 let currentIntensity = '2 hours/day';  // selected intensity option
 let currentData = null;                // the generated roadmap data
-let generationMode = '';               // 'AI-POWERED' or 'TEMPLATE'
 
 // ---------- Elements ----------
 const skillInput = document.getElementById('skillInput');
@@ -22,9 +19,6 @@ const generateBtn = document.getElementById('generateBtn');
 const warningMsg = document.getElementById('warningMsg');
 const resultSection = document.getElementById('resultSection');
 const toast = document.getElementById('toast');
-
-// API endpoint (same-origin — works when backend is deployed with the site)
-const API_ENDPOINT = '/api/generate-roadmap';
 
 /* ============================================================
    TIMETABLE — based on selected intensity
@@ -147,53 +141,10 @@ async function generateRoadmap() {
   }
   warningMsg.classList.remove('show');
 
+  // Build the roadmap instantly from templates
   currentSkill = skill;
-  setLoading(true);
-
-  // Try AI backend first, fall back to templates if unreachable
-  try {
-    const res = await fetch(API_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ skill: currentSkill, intensity: currentIntensity }),
-    });
-    if (!res.ok) throw new Error('API error');
-    const json = await res.json();
-    currentData = json.data;
-    generationMode = 'AI-POWERED';
-  } catch (err) {
-    currentData = buildTemplateData(currentSkill);
-    generationMode = 'TEMPLATE';
-  }
-
-  setLoading(false);
+  currentData = buildTemplateData(currentSkill);
   renderRoadmap();
-}
-
-// Toggle loading state on the generate button (with rotating messages)
-const loadingMessages = [
-  'Analyzing your skill…',
-  'Designing your 30-day plan…',
-  'Adding daily tasks & projects…',
-  'Almost ready…',
-];
-let loadingMsgTimer = null;
-
-function setLoading(isLoading) {
-  generateBtn.disabled = isLoading;
-  generateBtn.classList.toggle('loading', isLoading);
-  const btnText = generateBtn.querySelector('.btn-text');
-  clearInterval(loadingMsgTimer);
-  if (isLoading) {
-    let i = 0;
-    btnText.textContent = loadingMessages[0];
-    loadingMsgTimer = setInterval(() => {
-      i = Math.min(i + 1, loadingMessages.length - 1);
-      btnText.textContent = loadingMessages[i];
-    }, 3000);
-  } else {
-    btnText.textContent = 'Generate My Roadmap';
-  }
 }
 
 /* ============================================================
@@ -205,7 +156,6 @@ function renderRoadmap() {
   // Header
   document.getElementById('resultSkill').textContent = currentSkill;
   document.getElementById('resultIntensity').textContent = currentIntensity;
-  document.getElementById('resultMode').textContent = generationMode;
   document.getElementById('motivationLine').textContent =
     data.motivation || `Here is your 30-day extreme roadmap to make maximum progress in ${currentSkill}.`;
 
@@ -364,8 +314,8 @@ function closePhoneModal() {
   phoneError.classList.remove('show');
 }
 
-// Validate + save the phone number, then start the PDF download
-async function submitPhone() {
+// Validate the phone number, then start the PDF download
+function submitPhone() {
   // Keep digits only, drop an optional +91 prefix
   const phone = phoneInput.value.replace(/[\s\-]/g, '').replace(/^\+?91/, '');
 
@@ -377,20 +327,7 @@ async function submitPhone() {
     return;
   }
 
-  const submitBtn = document.getElementById('phoneSubmitBtn');
-  submitBtn.disabled = true;
-
-  // Save the lead to the backend (best effort — works offline too)
-  try {
-    await fetch('/api/leads', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: phone, skill: currentSkill }),
-    });
-  } catch (err) { /* static hosting: still allow the download */ }
-
   localStorage.setItem('mr_phone', phone);
-  submitBtn.disabled = false;
   closePhoneModal();
   showToast('✓ Unlocked! Downloading your PDF…');
   generatePDF();
