@@ -3,11 +3,12 @@
    Generates a 30-day learning roadmap for any skill.
 
    How generation works:
-   1. First we try the AI backend (POST /api/generate-roadmap)
-      for a fully personalized roadmap.
-   2. If the backend is not available (e.g. the site is hosted
-      as pure static files on GitHub Pages / Netlify), we fall
-      back to smart built-in templates, so the site ALWAYS works.
+   1. Requests a fast AI-powered roadmap from /api/generate-roadmap
+      (Netlify function calling Google Gemini Flash-Lite).
+   2. Features an 8-second client-side timeout via AbortController.
+   3. If the network is slow, times out, or the API is unavailable,
+      instantly and seamlessly falls back to high-quality curated templates.
+   4. The user is NEVER stuck on "Generating your unique roadmap...".
    ============================================================ */
 
 // ---------- State ----------
@@ -23,13 +24,13 @@ const warningMsg = document.getElementById('warningMsg');
 const resultSection = document.getElementById('resultSection');
 const toast = document.getElementById('toast');
 
-// API endpoint (same-origin — works when backend is deployed with the site)
-const API_ENDPOINT = '/api/generate-roadmap';
-
 /* ============================================================
-   TIMETABLE — based on selected intensity
+   TIMETABLE — based on selected intensity or AI-provided
    ============================================================ */
 function getTimetable(intensity) {
+  if (currentData && Array.isArray(currentData.timetable) && currentData.timetable.length > 0) {
+    return currentData.timetable;
+  }
   const timetables = {
     '1 hour/day': [
       { time: '10 min', task: "Revise yesterday's learning" },
@@ -54,7 +55,7 @@ function getTimetable(intensity) {
 }
 
 /* ============================================================
-   TEMPLATE FALLBACK — used when the AI backend is unreachable
+   TEMPLATE FALLBACK — high-quality curated roadmap templates
    ============================================================ */
 function buildTemplateData(skill) {
   return {
@@ -128,17 +129,47 @@ function buildTemplateData(skill) {
       good: `Clear foundation, daily practice experience, 2-3 small projects or outputs, and better confidence in ${skill}.`,
       extreme: `If followed seriously, you can create a strong beginner portfolio, understand the core of ${skill}, and know exactly what to learn next.`,
     },
+    disclaimer: 'Result depends on your consistency, starting level, daily time, and quality of practice.',
   };
 }
 
+// Toggle loading state on the generate button with rotating UX messages
+const loadingMessages = [
+  'Analyzing your skill…',
+  'Designing your 30-day curriculum…',
+  'Planning projects and practice…',
+  'Curating your learning path…',
+];
+let loadingMsgTimer = null;
+
+function setLoading(isLoading) {
+  generateBtn.disabled = isLoading;
+  generateBtn.classList.toggle('loading', isLoading);
+  const btnText = generateBtn.querySelector('.btn-text');
+  clearInterval(loadingMsgTimer);
+  loadingMsgTimer = null;
+
+  if (isLoading) {
+    let i = 0;
+    if (btnText) btnText.textContent = loadingMessages[0];
+    loadingMsgTimer = setInterval(() => {
+      i = (i + 1) % loadingMessages.length;
+      if (btnText) btnText.textContent = loadingMessages[i];
+    }, 2000);
+  } else {
+    if (btnText) btnText.textContent = 'Generate My Roadmap';
+  }
+}
+
 /* ============================================================
-   MAIN GENERATION FLOW
+   MAIN GENERATION FLOW — Fast AI with 8s Timeout & Fallback
    ============================================================ */
 async function generateRoadmap() {
   const skill = skillInput.value.trim();
 
   // 9. Empty input validation
   if (!skill) {
+    warningMsg.textContent = '⚠ Please enter a skill first.';
     warningMsg.classList.remove('show');
     void warningMsg.offsetWidth; // restart the shake animation
     warningMsg.classList.add('show');
@@ -150,50 +181,66 @@ async function generateRoadmap() {
   currentSkill = skill;
   setLoading(true);
 
-  // Try AI backend first, fall back to templates if unreachable
+  let roadmapData = null;
+  let mode = 'TEMPLATE';
+
+  // 8-second client-side timeout controller
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, 8000);
+
   try {
-    const res = await fetch(API_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ skill: currentSkill, intensity: currentIntensity }),
-    });
-    if (!res.ok) throw new Error('API error');
-    const json = await res.json();
-    currentData = json.data;
-    generationMode = 'AI-POWERED';
+    let resp = null;
+    try {
+      resp = await fetch('/api/generate-roadmap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ skill: currentSkill, intensity: currentIntensity }),
+        signal: controller.signal,
+      });
+    } catch (primaryErr) {
+      if (!controller.signal.aborted) {
+        resp = await fetch('/.netlify/functions/generate-roadmap', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ skill: currentSkill, intensity: currentIntensity }),
+          signal: controller.signal,
+        });
+      } else {
+        throw primaryErr;
+      }
+    }
+
+    if (resp && resp.ok) {
+      const payload = await resp.json();
+      const aiRoadmap = payload.roadmap || payload.data;
+      if (aiRoadmap && Array.isArray(aiRoadmap.phases) && aiRoadmap.phases.length > 0) {
+        roadmapData = aiRoadmap;
+        mode = 'AI-POWERED';
+      }
+    }
   } catch (err) {
-    currentData = buildTemplateData(currentSkill);
-    generationMode = 'TEMPLATE';
+    if (err.name === 'AbortError') {
+      console.warn('AI generation exceeded 8s limit — activating instant smart template.');
+    } else {
+      console.warn('AI generation request failed — activating instant smart template:', err.message);
+    }
+  } finally {
+    clearTimeout(timeoutId);
   }
+
+  // Graceful fallback to rich template if AI took >8s or errored
+  if (!roadmapData) {
+    roadmapData = buildTemplateData(currentSkill);
+    mode = 'TEMPLATE';
+  }
+
+  currentData = roadmapData;
+  generationMode = mode;
 
   setLoading(false);
   renderRoadmap();
-}
-
-// Toggle loading state on the generate button (with rotating messages)
-const loadingMessages = [
-  'Analyzing your skill…',
-  'Designing your 30-day plan…',
-  'Adding daily tasks & projects…',
-  'Almost ready…',
-];
-let loadingMsgTimer = null;
-
-function setLoading(isLoading) {
-  generateBtn.disabled = isLoading;
-  generateBtn.classList.toggle('loading', isLoading);
-  const btnText = generateBtn.querySelector('.btn-text');
-  clearInterval(loadingMsgTimer);
-  if (isLoading) {
-    let i = 0;
-    btnText.textContent = loadingMessages[0];
-    loadingMsgTimer = setInterval(() => {
-      i = Math.min(i + 1, loadingMessages.length - 1);
-      btnText.textContent = loadingMessages[i];
-    }, 3000);
-  } else {
-    btnText.textContent = 'Generate My Roadmap';
-  }
 }
 
 /* ============================================================
@@ -201,11 +248,17 @@ function setLoading(isLoading) {
    ============================================================ */
 function renderRoadmap() {
   const data = currentData;
+  if (!data) return;
 
   // Header
   document.getElementById('resultSkill').textContent = currentSkill;
   document.getElementById('resultIntensity').textContent = currentIntensity;
-  document.getElementById('resultMode').textContent = generationMode;
+
+  const modeEl = document.getElementById('resultMode');
+  if (modeEl) {
+    modeEl.textContent = generationMode;
+  }
+
   document.getElementById('motivationLine').textContent =
     data.motivation || `Here is your 30-day extreme roadmap to make maximum progress in ${currentSkill}.`;
 
@@ -234,7 +287,7 @@ function renderRoadmap() {
   `).join('');
 
   // Resources
-  document.getElementById('resourcesWrap').innerHTML = data.resources.map(r => `
+  document.getElementById('resourcesWrap').innerHTML = (data.resources || []).map(r => `
     <div class="info-card">
       <div class="info-label">${escapeHtml(r.label)}</div>
       <div class="info-text">${escapeHtml(r.text)}</div>
@@ -242,7 +295,7 @@ function renderRoadmap() {
   `).join('');
 
   // Projects
-  document.getElementById('projectsWrap').innerHTML = data.projects.map(p => `
+  document.getElementById('projectsWrap').innerHTML = (data.projects || []).map(p => `
     <div class="info-card">
       <div class="info-label">${escapeHtml(p.label)}</div>
       <div class="info-text">${escapeHtml(p.text)}</div>
@@ -250,18 +303,22 @@ function renderRoadmap() {
   `).join('');
 
   // Expected results
+  const minResult = data.results?.minimum || `Solid foundations and beginner output in ${currentSkill}.`;
+  const goodResult = data.results?.good || `Confident execution and practical projects in ${currentSkill}.`;
+  const extResult = data.results?.extreme || `Strong portfolio and advanced progression in ${currentSkill}.`;
+
   document.getElementById('resultsWrap').innerHTML = `
     <div class="result-card minimum">
       <div class="result-tier">MINIMUM RESULT</div>
-      <p>${escapeHtml(data.results.minimum)}</p>
+      <p>${escapeHtml(minResult)}</p>
     </div>
     <div class="result-card good">
       <div class="result-tier">GOOD RESULT</div>
-      <p>${escapeHtml(data.results.good)}</p>
+      <p>${escapeHtml(goodResult)}</p>
     </div>
     <div class="result-card extreme">
       <div class="result-tier">⚡ EXTREME RESULT</div>
-      <p>${escapeHtml(data.results.extreme)}</p>
+      <p>${escapeHtml(extResult)}</p>
     </div>
   `;
 
@@ -287,6 +344,8 @@ function escapeHtml(str) {
    ============================================================ */
 function buildRoadmapText() {
   const data = currentData;
+  if (!data) return '';
+
   const lines = [];
   lines.push('MASTERROADMAPS — 30-DAY EXTREME ROADMAP');
   lines.push('========================================');
@@ -308,19 +367,19 @@ function buildRoadmapText() {
   lines.push('');
 
   lines.push('FREE RESOURCES');
-  data.resources.forEach(r => lines.push(`  - ${r.label}: ${r.text}`));
+  (data.resources || []).forEach(r => lines.push(`  - ${r.label}: ${r.text}`));
   lines.push('');
 
   lines.push('PROJECT IDEAS');
-  data.projects.forEach(p => lines.push(`  - ${p.label}: ${p.text}`));
+  (data.projects || []).forEach(p => lines.push(`  - ${p.label}: ${p.text}`));
   lines.push('');
 
   lines.push('EXPECTED FINAL RESULT');
-  lines.push(`  Minimum: ${data.results.minimum}`);
-  lines.push(`  Good: ${data.results.good}`);
-  lines.push(`  Extreme: ${data.results.extreme}`);
+  lines.push(`  Minimum: ${data.results?.minimum || ''}`);
+  lines.push(`  Good: ${data.results?.good || ''}`);
+  lines.push(`  Extreme: ${data.results?.extreme || ''}`);
   lines.push('');
-  lines.push('Disclaimer: Result depends on your consistency, starting level, daily time, and quality of practice.');
+  lines.push('Disclaimer: ' + (data.disclaimer || 'Result depends on your consistency, starting level, daily time, and quality of practice.'));
   lines.push('');
   lines.push('MasterRoadmaps — No excuses, only execution.');
   return lines.join('\n');
@@ -378,40 +437,46 @@ async function submitPhone() {
   }
 
   const submitBtn = document.getElementById('phoneSubmitBtn');
-  submitBtn.disabled = true;
+  if (submitBtn) submitBtn.disabled = true;
 
-  // Save the lead to the backend (best effort — works offline too)
+  // Save the lead (best effort)
   try {
     await fetch('/api/leads', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone: phone, skill: currentSkill }),
     });
-  } catch (err) { /* static hosting: still allow the download */ }
+  } catch (err) { /* offline/static hosting: still allow download */ }
 
   localStorage.setItem('mr_phone', phone);
-  submitBtn.disabled = false;
+  if (submitBtn) submitBtn.disabled = false;
   closePhoneModal();
   showToast('✓ Unlocked! Downloading your PDF…');
   generatePDF();
 }
 
 // Allow only digits in the phone input + Enter to submit
-phoneInput.addEventListener('input', () => {
-  phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
-});
-phoneInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter') submitPhone();
-});
+if (phoneInput) {
+  phoneInput.addEventListener('input', () => {
+    phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+  });
+  phoneInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') submitPhone();
+  });
+}
+
 // Click outside the card closes the modal
-phoneModal.addEventListener('click', e => {
-  if (e.target === phoneModal) closePhoneModal();
-});
+if (phoneModal) {
+  phoneModal.addEventListener('click', e => {
+    if (e.target === phoneModal) closePhoneModal();
+  });
+}
 
 /* ============================================================
    PDF GENERATION (jsPDF, fully client-side)
    ============================================================ */
 function generatePDF() {
+  if (!currentData) return;
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
@@ -424,7 +489,7 @@ function generatePDF() {
   const DARK = [26, 18, 12];
   const GREY = [110, 95, 82];
 
-  // Add a new page when we run out of space
+  // Add a new page when running out of space
   function checkPage(needed) {
     if (y + needed > pageH - margin) {
       doc.addPage();
@@ -487,23 +552,23 @@ function generatePDF() {
 
   // ---- Resources ----
   writeHeading('FREE RESOURCES');
-  currentData.resources.forEach(r =>
+  (currentData.resources || []).forEach(r =>
     writeText(`${r.label}: ${r.text}`, 10.5, 'normal', DARK, 10, 0));
   y += 6;
 
   // ---- Projects ----
   writeHeading('PROJECT IDEAS');
-  currentData.projects.forEach(p =>
+  (currentData.projects || []).forEach(p =>
     writeText(`${p.label}: ${p.text}`, 10.5, 'normal', DARK, 10, 0));
   y += 6;
 
   // ---- Expected results ----
   writeHeading('EXPECTED FINAL RESULT');
-  writeText(`Minimum: ${currentData.results.minimum}`, 10.5, 'normal', DARK, 10, 0);
-  writeText(`Good: ${currentData.results.good}`, 10.5, 'normal', DARK, 10, 0);
-  writeText(`Extreme: ${currentData.results.extreme}`, 10.5, 'normal', DARK, 10, 4);
+  writeText(`Minimum: ${currentData.results?.minimum || ''}`, 10.5, 'normal', DARK, 10, 0);
+  writeText(`Good: ${currentData.results?.good || ''}`, 10.5, 'normal', DARK, 10, 0);
+  writeText(`Extreme: ${currentData.results?.extreme || ''}`, 10.5, 'normal', DARK, 10, 4);
 
-  writeText('Disclaimer: Result depends on your consistency, starting level, daily time, and quality of practice.', 9, 'italic', GREY, 0, 10);
+  writeText('Disclaimer: ' + (currentData.disclaimer || 'Result depends on your consistency, starting level, daily time, and quality of practice.'), 9, 'italic', GREY, 0, 10);
   writeText('MasterRoadmaps — No excuses, only execution.   |   Created by Rishi Srivastav', 9.5, 'bold', ORANGE, 0, 0);
 
   // File name: "[skill]-30-day-roadmap.pdf"
@@ -535,7 +600,6 @@ const CREATOR_EMAIL = 'srivastavrishi267@gmail.com';
 function connectWithMe() {
   const subject = encodeURIComponent('Hello Rishi — from MasterRoadmaps');
   const body = encodeURIComponent('Hi Rishi,\n\nI found you through MasterRoadmaps and wanted to connect!\n\n');
-  // Gmail compose works in any browser, even without a mail app installed
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${CREATOR_EMAIL}&su=${subject}&body=${body}`;
   window.open(gmailUrl, '_blank', 'noopener');
   showToast('✉ Opening email to ' + CREATOR_EMAIL);
@@ -550,7 +614,7 @@ function copyEmail() {
 /* ============================================================
    UI HELPERS
    ============================================================ */
-// 10. Skill chips fill the input box
+// Skill chips fill the input box
 function fillSkill(skill) {
   skillInput.value = skill;
   warningMsg.classList.remove('show');
@@ -586,6 +650,7 @@ skillInput.addEventListener('keydown', e => {
 // Floating particles background
 function createParticles() {
   const container = document.getElementById('particles');
+  if (!container) return;
   for (let i = 0; i < 26; i++) {
     const p = document.createElement('div');
     p.className = 'particle' + (Math.random() > 0.5 ? ' cyan' : '');
