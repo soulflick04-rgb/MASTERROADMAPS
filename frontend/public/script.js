@@ -1,6 +1,7 @@
 /* ============================================================
    MasterRoadmaps — script.js
-   Generates a 30-day learning roadmap for any skill.
+   Retro Neo-Brutalist & Cyber-Industrial Design System
+   Matches Stitch Roadmap Platform UI Redesign
 
    How generation works:
    1. Requests a fast AI-powered roadmap from /api/generate-roadmap
@@ -42,6 +43,12 @@ function getTimetable(intensity) {
       { time: '45 min', task: 'Learning' },
       { time: '45 min', task: 'Practice' },
       { time: '15 min', task: 'Notes, output, or reflection' },
+    ],
+    '4 hours/day': [
+      { time: '30 min', task: 'Revision and warm-up' },
+      { time: '90 min', task: 'Deep learning' },
+      { time: '90 min', task: 'Deep practice' },
+      { time: '30 min', task: 'Project/output work' },
     ],
     '4 hours/day Extreme': [
       { time: '30 min', task: 'Revision and warm-up' },
@@ -135,10 +142,10 @@ function buildTemplateData(skill) {
 
 // Toggle loading state on the generate button with rotating UX messages
 const loadingMessages = [
-  'Analyzing your skill…',
-  'Designing your 30-day curriculum…',
-  'Planning projects and practice…',
-  'Curating your learning path…',
+  '⚡ Analyzing your skill…',
+  '⚡ Designing your 30-day curriculum…',
+  '⚡ Planning projects and practice…',
+  '⚡ Curating your learning path…',
 ];
 let loadingMsgTimer = null;
 
@@ -155,9 +162,9 @@ function setLoading(isLoading) {
     loadingMsgTimer = setInterval(() => {
       i = (i + 1) % loadingMessages.length;
       if (btnText) btnText.textContent = loadingMessages[i];
-    }, 2000);
+    }, 1800);
   } else {
-    if (btnText) btnText.textContent = 'Generate My Roadmap';
+    if (btnText) btnText.textContent = '⚡ Generate My Roadmap';
   }
 }
 
@@ -167,11 +174,11 @@ function setLoading(isLoading) {
 async function generateRoadmap() {
   const skill = skillInput.value.trim();
 
-  // 9. Empty input validation
+  // Empty input validation
   if (!skill) {
     warningMsg.textContent = '⚠ Please enter a skill first.';
     warningMsg.classList.remove('show');
-    void warningMsg.offsetWidth; // restart the shake animation
+    void warningMsg.offsetWidth; // restart shake animation
     warningMsg.classList.add('show');
     skillInput.focus();
     return;
@@ -244,85 +251,107 @@ async function generateRoadmap() {
 }
 
 /* ============================================================
-   RENDERING
+   RENDERING — Styled with Stitch Neo-Brutalist Components
    ============================================================ */
 function renderRoadmap() {
   const data = currentData;
   if (!data) return;
 
-  // Header
+  // Header & Badges
   document.getElementById('resultSkill').textContent = currentSkill;
   document.getElementById('resultIntensity').textContent = currentIntensity;
 
   const modeEl = document.getElementById('resultMode');
   if (modeEl) {
-    modeEl.textContent = generationMode;
+    modeEl.textContent = generationMode === 'AI-POWERED' ? 'AI-POWERED' : 'CURATED';
   }
 
   document.getElementById('motivationLine').textContent =
     data.motivation || `Here is your 30-day extreme roadmap to make maximum progress in ${currentSkill}.`;
 
-  // Phases
+  // 1. Phases Grid (Rendered in Neo-Brutalist Card Style)
   const phasesWrap = document.getElementById('phasesWrap');
   phasesWrap.innerHTML = data.phases.map((phase, i) => `
-    <div class="phase-card" data-testid="phase-card-${i + 1}">
-      <div class="phase-top">
-        <span class="phase-days">${escapeHtml(phase.days)}</span>
-        <span class="phase-name">Phase ${i + 1}: ${escapeHtml(phase.name)}</span>
+    <div class="border-retro bg-white p-5 shadow-hard space-y-3" data-testid="phase-card-${i + 1}">
+      <div class="flex items-center justify-between border-b-2 border-black pb-2">
+        <span class="bg-black text-white px-2 py-0.5 text-xs font-mono font-bold">${escapeHtml(phase.days)}</span>
+        <span class="text-xs sm:text-sm font-black uppercase font-mono">Phase ${i + 1}: ${escapeHtml(phase.name)}</span>
       </div>
-      <p class="phase-goal">Goal: ${escapeHtml(phase.goal)}</p>
-      <ul class="phase-tasks">
-        ${phase.tasks.map(t => `<li>${escapeHtml(t)}</li>`).join('')}
+      <p class="text-xs font-mono font-bold text-neutral-800">Goal: ${escapeHtml(phase.goal)}</p>
+      <ul class="space-y-1.5 text-xs font-mono text-neutral-700">
+        ${phase.tasks.map(t => `<li class="flex items-start gap-2"><span class="text-retroYellow text-sm leading-none font-bold">▪</span><span>${escapeHtml(t)}</span></li>`).join('')}
       </ul>
     </div>
   `).join('');
 
-  // Timetable
+  // 2. Timetable (Rendered in Retro Pink Card Style)
   const timetable = getTimetable(currentIntensity);
-  document.getElementById('timetableWrap').innerHTML = timetable.map(row => `
-    <div class="timetable-row">
-      <span class="timetable-time">${escapeHtml(row.time)}</span>
-      <span class="timetable-task">${escapeHtml(row.task)}</span>
+  document.getElementById('timetableWrap').innerHTML = timetable.map((row, idx) => `
+    <div class="border-retro bg-white p-3 shadow-hard-sm">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs font-black bg-cream-canvas border border-black px-1.5 py-0.5 font-mono">${escapeHtml(row.time)}</span>
+        <span class="text-[10px] font-bold uppercase text-neutral-600">Block 0${idx + 1}</span>
+      </div>
+      <div class="text-xs font-bold font-mono">${escapeHtml(row.task)}</div>
     </div>
   `).join('');
 
-  // Resources
+  // 3. Resources (Rendered with Stitch Resource Item Style)
   document.getElementById('resourcesWrap').innerHTML = (data.resources || []).map(r => `
-    <div class="info-card">
-      <div class="info-label">${escapeHtml(r.label)}</div>
-      <div class="info-text">${escapeHtml(r.text)}</div>
+    <div class="border-retro bg-cream-canvas p-3 shadow-hard-sm flex items-start justify-between gap-2">
+      <div class="space-y-0.5 min-w-0">
+        <div class="text-xs font-black uppercase font-mono flex items-center gap-1.5 truncate">
+          <span>⚑</span> ${escapeHtml(r.label)}
+        </div>
+        <p class="text-[11px] text-neutral-700 font-mono line-clamp-2">
+          ${escapeHtml(r.text)}
+        </p>
+      </div>
+      <a class="border-retro bg-white w-7 h-7 flex-shrink-0 flex items-center justify-center text-xs font-bold shadow-hard-sm hover:bg-retroYellow btn-press" href="https://www.google.com/search?q=${encodeURIComponent(r.label + ' ' + currentSkill + ' ' + r.text)}" target="_blank" rel="noopener" title="Search resource">↗</a>
     </div>
   `).join('');
 
-  // Projects
-  document.getElementById('projectsWrap').innerHTML = (data.projects || []).map(p => `
-    <div class="info-card">
-      <div class="info-label">${escapeHtml(p.label)}</div>
-      <div class="info-text">${escapeHtml(p.text)}</div>
+  // 4. Projects (Rendered with Stitch Project Stage Badges)
+  const stageBadges = [
+    '<span class="text-[10px] font-bold uppercase bg-black text-white px-1.5 py-0.5">PoC Stage</span>',
+    '<span class="text-[10px] font-bold uppercase bg-retroYellow border border-black px-1.5 py-0.5">Intermediate</span>',
+    '<span class="text-[10px] font-bold uppercase bg-retroPink border border-black px-1.5 py-0.5">Capstone</span>',
+    '<span class="text-[10px] font-bold uppercase bg-cream-canvas border border-black px-1.5 py-0.5">Deployment</span>'
+  ];
+
+  document.getElementById('projectsWrap').innerHTML = (data.projects || []).map((p, idx) => `
+    <div class="border-retro bg-cream-canvas p-3.5 shadow-hard-sm">
+      <div class="flex items-center justify-between">
+        <div class="text-xs font-black uppercase font-mono">${escapeHtml(p.label)}</div>
+        ${stageBadges[idx % stageBadges.length]}
+      </div>
+      <p class="text-[11px] text-neutral-700 font-mono mt-1">
+        ${escapeHtml(p.text)}
+      </p>
     </div>
   `).join('');
 
-  // Expected results
+  // 5. Expected Results (Tiers rendered with Retro Highlighted Cards)
   const minResult = data.results?.minimum || `Solid foundations and beginner output in ${currentSkill}.`;
   const goodResult = data.results?.good || `Confident execution and practical projects in ${currentSkill}.`;
   const extResult = data.results?.extreme || `Strong portfolio and advanced progression in ${currentSkill}.`;
 
   document.getElementById('resultsWrap').innerHTML = `
-    <div class="result-card minimum">
-      <div class="result-tier">MINIMUM RESULT</div>
-      <p>${escapeHtml(minResult)}</p>
+    <div class="border-retro bg-white p-3 shadow-hard-sm space-y-1">
+      <div class="text-[10px] font-black uppercase tracking-wider text-neutral-600 font-mono">MINIMUM RESULT</div>
+      <p class="text-xs font-mono text-neutral-900">${escapeHtml(minResult)}</p>
     </div>
-    <div class="result-card good">
-      <div class="result-tier">GOOD RESULT</div>
-      <p>${escapeHtml(goodResult)}</p>
+    <div class="border-retro bg-retroYellowLight p-3 shadow-hard-sm space-y-1">
+      <div class="text-[10px] font-black uppercase tracking-wider text-neutral-800 font-mono font-bold">GOOD RESULT</div>
+      <p class="text-xs font-mono text-neutral-900">${escapeHtml(goodResult)}</p>
     </div>
-    <div class="result-card extreme">
-      <div class="result-tier">⚡ EXTREME RESULT</div>
-      <p>${escapeHtml(extResult)}</p>
+    <div class="border-retro bg-retroPinkLight p-3 shadow-hard-sm space-y-1">
+      <div class="text-[10px] font-black uppercase tracking-wider text-neutral-800 font-mono font-bold">⚡ EXTREME RESULT</div>
+      <p class="text-xs font-mono text-neutral-900 font-bold">${escapeHtml(extResult)}</p>
     </div>
   `;
 
-  // Show the section with a reveal animation, then smooth-scroll to it
+  // Show the section with reveal animation, then smooth-scroll to it
   resultSection.classList.add('show');
   resultSection.classList.remove('animate-in');
   void resultSection.offsetWidth; // restart animation
@@ -397,7 +426,6 @@ function copyRoadmap() {
 
 function downloadRoadmap() {
   if (!currentData) return;
-  // Phone-gate: ask for the number once, remember it with localStorage
   if (!localStorage.getItem('mr_phone')) {
     openPhoneModal();
     return;
@@ -425,13 +453,11 @@ function closePhoneModal() {
 
 // Validate + save the phone number, then start the PDF download
 async function submitPhone() {
-  // Keep digits only, drop an optional +91 prefix
   const phone = phoneInput.value.replace(/[\s\-]/g, '').replace(/^\+?91/, '');
 
-  // Indian mobile numbers: 10 digits, starting with 6-9
   if (!/^[6-9]\d{9}$/.test(phone)) {
     phoneError.classList.remove('show');
-    void phoneError.offsetWidth; // restart the shake animation
+    void phoneError.offsetWidth; // restart shake animation
     phoneError.classList.add('show');
     return;
   }
@@ -439,7 +465,6 @@ async function submitPhone() {
   const submitBtn = document.getElementById('phoneSubmitBtn');
   if (submitBtn) submitBtn.disabled = true;
 
-  // Save the lead (best effort)
   try {
     await fetch('/api/leads', {
       method: 'POST',
@@ -455,7 +480,6 @@ async function submitPhone() {
   generatePDF();
 }
 
-// Allow only digits in the phone input + Enter to submit
 if (phoneInput) {
   phoneInput.addEventListener('input', () => {
     phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
@@ -465,7 +489,6 @@ if (phoneInput) {
   });
 }
 
-// Click outside the card closes the modal
 if (phoneModal) {
   phoneModal.addEventListener('click', e => {
     if (e.target === phoneModal) closePhoneModal();
@@ -473,7 +496,7 @@ if (phoneModal) {
 }
 
 /* ============================================================
-   PDF GENERATION (jsPDF, fully client-side)
+   PDF GENERATION (jsPDF, styled with Stitch Retro Palette)
    ============================================================ */
 function generatePDF() {
   if (!currentData) return;
@@ -484,12 +507,11 @@ function generatePDF() {
   const margin = 48;
   let y = 0;
 
-  const ORANGE = [255, 123, 28];
-  const AMBER = [255, 179, 64];
-  const DARK = [26, 18, 12];
-  const GREY = [110, 95, 82];
+  const RETRO_YELLOW = [245, 189, 39];
+  const RETRO_PINK = [244, 194, 234];
+  const DARK = [0, 0, 0];
+  const GREY = [60, 60, 60];
 
-  // Add a new page when running out of space
   function checkPage(needed) {
     if (y + needed > pageH - margin) {
       doc.addPage();
@@ -497,9 +519,8 @@ function generatePDF() {
     }
   }
 
-  // Write one wrapped block of text
   function writeText(text, size, style, color, indent, gap) {
-    doc.setFont('helvetica', style);
+    doc.setFont('courier', style);
     doc.setFontSize(size);
     doc.setTextColor(color[0], color[1], color[2]);
     const lines = doc.splitTextToSize(String(text), pageW - margin * 2 - indent);
@@ -511,67 +532,69 @@ function generatePDF() {
     y += gap;
   }
 
-  // Section heading with an orange underline
   function writeHeading(title) {
     checkPage(46);
-    y += 10;
-    writeText(title, 14, 'bold', ORANGE, 0, 2);
-    doc.setDrawColor(ORANGE[0], ORANGE[1], ORANGE[2]);
-    doc.setLineWidth(1.2);
-    doc.line(margin, y - 8, margin + 70, y - 8);
+    y += 12;
+    writeText(title, 13, 'bold', DARK, 0, 2);
+    doc.setDrawColor(RETRO_YELLOW[0], RETRO_YELLOW[1], RETRO_YELLOW[2]);
+    doc.setLineWidth(2.5);
+    doc.line(margin, y - 6, margin + 90, y - 6);
     y += 6;
   }
 
   // ---- Header banner ----
-  doc.setFillColor(12, 8, 5);
-  doc.rect(0, 0, pageW, 96, 'F');
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(21);
-  doc.setTextColor(ORANGE[0], ORANGE[1], ORANGE[2]);
-  doc.text('MASTERROADMAPS', margin, 44);
+  doc.setFillColor(RETRO_YELLOW[0], RETRO_YELLOW[1], RETRO_YELLOW[2]);
+  doc.rect(0, 0, pageW, 90, 'F');
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(2);
+  doc.line(0, 90, pageW, 90);
+
+  doc.setFont('courier', 'bold');
+  doc.setFontSize(20);
+  doc.setTextColor(0, 0, 0);
+  doc.text('MASTERROADMAPS // 30-DAY SPRINT', margin, 42);
   doc.setFontSize(11);
-  doc.setTextColor(AMBER[0], AMBER[1], AMBER[2]);
-  doc.text(`30-Day Extreme Roadmap  |  ${currentSkill.toUpperCase()}  |  ${currentIntensity}`, margin, 68);
-  y = 126;
+  doc.text(`MISSION: ${currentSkill.toUpperCase()}  |  INTENSITY: ${currentIntensity}`, margin, 66);
+  y = 120;
 
   writeText(currentData.motivation || '', 11, 'italic', GREY, 0, 8);
 
   // ---- Phases ----
   currentData.phases.forEach((phase, i) => {
     writeHeading(`PHASE ${i + 1}: ${phase.days} — ${phase.name}`);
-    writeText(`Goal: ${phase.goal}`, 10.5, 'bolditalic', DARK, 0, 4);
-    phase.tasks.forEach(t => writeText(`•  ${t}`, 10.5, 'normal', DARK, 10, 0));
+    writeText(`Goal: ${phase.goal}`, 10, 'bold', DARK, 0, 4);
+    phase.tasks.forEach(t => writeText(`[x]  ${t}`, 10, 'normal', DARK, 10, 0));
     y += 6;
   });
 
   // ---- Timetable ----
   writeHeading(`DAILY TIMETABLE (${currentIntensity})`);
   getTimetable(currentIntensity).forEach(row =>
-    writeText(`${row.time}  —  ${row.task}`, 10.5, 'normal', DARK, 10, 0));
+    writeText(`${row.time}  ::  ${row.task}`, 10, 'normal', DARK, 10, 0));
   y += 6;
 
   // ---- Resources ----
   writeHeading('FREE RESOURCES');
   (currentData.resources || []).forEach(r =>
-    writeText(`${r.label}: ${r.text}`, 10.5, 'normal', DARK, 10, 0));
+    writeText(`${r.label}: ${r.text}`, 10, 'normal', DARK, 10, 0));
   y += 6;
 
   // ---- Projects ----
   writeHeading('PROJECT IDEAS');
   (currentData.projects || []).forEach(p =>
-    writeText(`${p.label}: ${p.text}`, 10.5, 'normal', DARK, 10, 0));
+    writeText(`${p.label}: ${p.text}`, 10, 'normal', DARK, 10, 0));
   y += 6;
 
   // ---- Expected results ----
   writeHeading('EXPECTED FINAL RESULT');
-  writeText(`Minimum: ${currentData.results?.minimum || ''}`, 10.5, 'normal', DARK, 10, 0);
-  writeText(`Good: ${currentData.results?.good || ''}`, 10.5, 'normal', DARK, 10, 0);
-  writeText(`Extreme: ${currentData.results?.extreme || ''}`, 10.5, 'normal', DARK, 10, 4);
+  writeText(`Minimum: ${currentData.results?.minimum || ''}`, 10, 'normal', DARK, 10, 0);
+  writeText(`Good: ${currentData.results?.good || ''}`, 10, 'normal', DARK, 10, 0);
+  writeText(`Extreme: ${currentData.results?.extreme || ''}`, 10, 'normal', DARK, 10, 4);
 
   writeText('Disclaimer: ' + (currentData.disclaimer || 'Result depends on your consistency, starting level, daily time, and quality of practice.'), 9, 'italic', GREY, 0, 10);
-  writeText('MasterRoadmaps — No excuses, only execution.   |   Created by Rishi Srivastav', 9.5, 'bold', ORANGE, 0, 0);
+  writeText('MasterRoadmaps — No excuses, only execution.   |   Creator: Rishi Srivastav', 9.5, 'bold', DARK, 0, 0);
 
-  // File name: "[skill]-30-day-roadmap.pdf"
+  // File name
   doc.save(`${currentSkill.toLowerCase().replace(/\s+/g, '-')}-30-day-roadmap.pdf`);
   showToast('↓ PDF downloaded!');
 }
@@ -631,7 +654,7 @@ function showToast(message) {
 }
 
 /* ============================================================
-   SETUP — intensity buttons, particles, scroll reveal, enter key
+   SETUP — intensity buttons, enter key listener
    ============================================================ */
 // Intensity selector buttons
 document.querySelectorAll('.intensity-btn').forEach(btn => {
@@ -646,34 +669,3 @@ document.querySelectorAll('.intensity-btn').forEach(btn => {
 skillInput.addEventListener('keydown', e => {
   if (e.key === 'Enter') generateRoadmap();
 });
-
-// Floating particles background
-function createParticles() {
-  const container = document.getElementById('particles');
-  if (!container) return;
-  for (let i = 0; i < 26; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle' + (Math.random() > 0.5 ? ' cyan' : '');
-    const size = Math.random() * 3 + 1.5;
-    p.style.width = size + 'px';
-    p.style.height = size + 'px';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.top = 100 + Math.random() * 20 + '%';
-    p.style.animationDuration = (Math.random() * 14 + 10) + 's';
-    p.style.animationDelay = (Math.random() * 14) + 's';
-    container.appendChild(p);
-  }
-}
-createParticles();
-
-// Scroll reveal for "How it works" cards and section titles
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));

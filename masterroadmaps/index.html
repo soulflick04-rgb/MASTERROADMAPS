@@ -3,224 +3,749 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MasterRoadmaps — Master Any Skill in 30 Days</title>
-  <meta name="description" content="Get an extreme 30-day roadmap, daily timetable, free resources, project ideas, and realistic final outcomes for any skill." />
+  <title>MasterRoadmaps — Extreme 30-Day Learning System</title>
+  <meta name="description" content="Get an extreme 30-day roadmap, daily timetable, free resources, project ideas, and realistic final outcomes for any skill. Built for students, working professionals, and self-learners." />
+  
+  <!-- Google Fonts: Space Mono & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Great+Vibes&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS v3 with configuration matching Stitch design -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['"Space Mono"', 'Courier New', 'monospace'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            mint: {
+              frame: '#9ec8ad',
+              light: '#bfe0cb',
+              border: '#78a688'
+            },
+            cream: {
+              canvas: '#fff9ee',
+              card: '#fdf6e7'
+            },
+            retroYellow: '#f5bd27',
+            retroYellowLight: '#fde382',
+            retroPink: '#f4c2ea',
+            retroPinkLight: '#fce3f6',
+          },
+          boxShadow: {
+            'hard': '3px 3px 0px #000000',
+            'hard-sm': '2px 2px 0px #000000',
+            'hard-lg': '5px 5px 0px #000000',
+            'hard-xl': '7px 7px 0px #000000',
+          }
+        }
+      }
+    }
+  </script>
+
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="selection:bg-black selection:text-retroYellow">
 
-  <!-- Animated background layers -->
-  <div class="bg-gradient" aria-hidden="true"></div>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="orb orb-1" aria-hidden="true"></div>
-  <div class="orb orb-2" aria-hidden="true"></div>
-  <div class="orb orb-3" aria-hidden="true"></div>
-  <div id="particles" aria-hidden="true"></div>
-
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-inner">
-      <a href="#hero" class="logo" data-testid="nav-logo">
-        <span class="logo-mark">◆</span> Master<span class="logo-accent">Roadmaps</span>
-      </a>
-      <div class="nav-links">
-        <a href="#how-it-works" data-testid="nav-how-link">How it works</a>
-        <a href="#about" data-testid="nav-about-link">About</a>
-        <a href="#hero" class="nav-cta" data-testid="nav-cta-btn">Start now</a>
+  <!-- Master Application Window Wrapper (Mimics Stitch Bezel Desktop Frame) -->
+  <div class="w-full max-w-[1400px] border-retro bg-mint-frame shadow-hard-xl rounded-md overflow-hidden p-2 sm:p-4 mx-auto" data-purpose="app-outer-window">
+    
+    <!-- Top Window Titlebar -->
+    <div class="flex items-center justify-between pb-3 px-1 text-xs md:text-sm font-bold tracking-tight" data-purpose="window-titlebar">
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 rounded-full bg-black border border-black inline-block"></span>
+        <span class="w-3 h-3 rounded-full bg-white border border-black inline-block"></span>
+        <span class="w-3 h-3 rounded-full bg-retroYellow border border-black inline-block"></span>
+        <span class="ml-2 font-mono uppercase tracking-wider text-[11px] sm:text-xs">PROTOCOL 30-DAY EXTREME ACCELERATION // SPRINT V3.4</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-3">
+        <span class="bg-black text-white px-2 py-0.5 text-xs font-mono">4,819 ROADMAPS BUILT TODAY</span>
       </div>
     </div>
-  </nav>
 
-  <!-- 1. HERO SECTION -->
-  <header class="hero" id="hero">
-    <div class="hero-badge reveal-on-load" data-testid="hero-badge">
-      <span class="pulse-dot"></span> 30-DAY EXTREME LEARNING SYSTEM
-    </div>
+    <!-- Inner Application Canvas Container -->
+    <div class="border-retro bg-cream-canvas rounded-sm min-h-[900px] flex flex-col md:flex-row overflow-hidden shadow-hard" data-purpose="canvas-interior">
+      
+      <!-- Retro Sidebar Navigation -->
+      <aside class="w-full md:w-64 bg-mint-frame md:border-retro-r border-b-2 md:border-b-0 border-black p-4 flex flex-col justify-between flex-shrink-0" data-purpose="sidebar-nav">
+        <div>
+          <!-- Logo & Brand Header -->
+          <a href="#hero" class="flex items-center gap-2 mb-8 pt-1" data-testid="nav-logo">
+            <div class="bg-black text-white px-2 py-1 font-mono text-sm font-bold tracking-tighter border-retro flex items-center justify-center">
+              &lt;/&gt;
+            </div>
+            <span class="font-bold text-lg tracking-tight uppercase font-mono">MasterRoadmaps</span>
+          </a>
 
-    <h1 class="hero-title reveal-on-load delay-1" data-testid="hero-title">
-      Master Any Skill<br /><span class="glow-text">in 30 Days</span>
-    </h1>
-
-    <p class="hero-subtitle reveal-on-load delay-2" data-testid="hero-subtitle">
-      Get an extreme 30-day roadmap, daily timetable, free resources,
-      project ideas, and realistic final outcomes for any skill.
-    </p>
-
-    <!-- Generator form -->
-    <div class="generator-card glass reveal-on-load delay-3" data-testid="generator-card">
-      <div class="input-row">
-        <input
-          type="text"
-          id="skillInput"
-          data-testid="skill-input"
-          placeholder="Type a skill, e.g. magic, coding, video editing…"
-          autocomplete="off"
-        />
-      </div>
-
-      <!-- Intensity selector -->
-      <div class="intensity-row" role="radiogroup" aria-label="Daily intensity">
-        <span class="intensity-label">INTENSITY</span>
-        <div class="intensity-options">
-          <button class="intensity-btn" data-value="1 hour/day" data-testid="intensity-1h">1 hour/day</button>
-          <button class="intensity-btn active" data-value="2 hours/day" data-testid="intensity-2h">2 hours/day</button>
-          <button class="intensity-btn extreme" data-value="4 hours/day Extreme" data-testid="intensity-4h">4 hours/day ⚡ Extreme</button>
+          <!-- Main Nav Items -->
+          <nav class="space-y-2">
+            <a class="flex items-center gap-3 px-3 py-2 text-xs font-bold uppercase tracking-wider border-retro bg-cream-canvas shadow-hard-sm hover:translate-x-1 transition-all" href="#hero" data-testid="nav-home-link">
+              <span>🏠</span> Home
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 text-xs font-bold uppercase tracking-wider border-retro bg-mint-frame hover:bg-cream-canvas hover:shadow-hard-sm transition-all" href="#timeline" data-testid="nav-how-link">
+              <span>📅</span> Schedule
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 text-xs font-bold uppercase tracking-wider border-retro bg-black text-white shadow-hard-sm" href="#creator" data-testid="nav-about-link">
+              <span>🎓</span> System Lead
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 text-xs font-bold uppercase tracking-wider border-retro bg-mint-frame hover:bg-cream-canvas hover:shadow-hard-sm transition-all" href="#resources">
+              <span>🛡</span> Resource Library
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 text-xs font-bold uppercase tracking-wider border-retro bg-mint-frame hover:bg-cream-canvas hover:shadow-hard-sm transition-all" href="#projects">
+              <span>⚙</span> Project Specs
+            </a>
+          </nav>
         </div>
-      </div>
 
-      <button class="generate-btn" id="generateBtn" data-testid="generate-btn" onclick="generateRoadmap()">
-        <span class="btn-text">Generate My Roadmap</span>
-        <span class="btn-loader" aria-hidden="true"></span>
-      </button>
-
-      <!-- Warning message for empty input -->
-      <div class="warning-msg" id="warningMsg" data-testid="warning-msg">⚠ Please enter a skill first.</div>
-
-      <p class="trust-text" data-testid="trust-text">Built for students, working professionals, and self-learners.</p>
-    </div>
-
-    <!-- 10. Sample skill chips -->
-    <div class="chips-row reveal-on-load delay-4" data-testid="skill-chips">
-      <button class="chip" onclick="fillSkill('Web Development')" data-testid="chip-web-development">Web Development</button>
-      <button class="chip" onclick="fillSkill('Video Editing')" data-testid="chip-video-editing">Video Editing</button>
-      <button class="chip" onclick="fillSkill('Excel')" data-testid="chip-excel">Excel</button>
-      <button class="chip" onclick="fillSkill('Public Speaking')" data-testid="chip-public-speaking">Public Speaking</button>
-      <button class="chip" onclick="fillSkill('Magic')" data-testid="chip-magic">Magic</button>
-      <button class="chip" onclick="fillSkill('Graphic Design')" data-testid="chip-graphic-design">Graphic Design</button>
-      <button class="chip" onclick="fillSkill('AI Tools')" data-testid="chip-ai-tools">AI Tools</button>
-      <button class="chip" onclick="fillSkill('Fitness')" data-testid="chip-fitness">Fitness</button>
-    </div>
-  </header>
-
-  <!-- 2. HOW IT WORKS SECTION -->
-  <section class="how-section" id="how-it-works">
-    <p class="section-eyebrow reveal">THE SYSTEM</p>
-    <h2 class="section-title reveal">How it works</h2>
-    <div class="how-grid">
-      <div class="how-card glass reveal" data-testid="how-card-1">
-        <div class="how-num">01</div>
-        <div class="how-icon">⌨</div>
-        <h3>Type Any Skill</h3>
-        <p>Enter whatever you want to learn, from coding to magic to public speaking.</p>
-      </div>
-      <div class="how-card glass reveal" data-testid="how-card-2">
-        <div class="how-num">02</div>
-        <div class="how-icon">🗺</div>
-        <h3>Get a 30-Day Plan</h3>
-        <p>Receive a focused roadmap divided into phases, daily practice, and project tasks.</p>
-      </div>
-      <div class="how-card glass reveal" data-testid="how-card-3">
-        <div class="how-num">03</div>
-        <div class="how-icon">◆</div>
-        <h3>Build Real Output</h3>
-        <p>Follow the plan and finish with practical projects or visible results.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3-8. RESULT SECTION (hidden until generated) -->
-  <section class="result-section" id="resultSection" data-testid="result-section">
-
-    <!-- Roadmap header -->
-    <div class="result-header">
-      <p class="section-eyebrow">YOUR PERSONAL PLAN</p>
-      <h2 class="result-skill" id="resultSkill" data-testid="result-skill-name"></h2>
-      <div class="result-meta">
-        <span class="meta-pill" id="resultIntensity" data-testid="result-intensity"></span>
-        <span class="meta-pill">30 DAYS</span>
-      </div>
-      <p class="motivation-line" id="motivationLine" data-testid="motivation-line"></p>
-    </div>
-
-    <!-- 8. Action buttons -->
-    <div class="action-row" data-testid="action-buttons">
-      <button class="action-btn" onclick="copyRoadmap()" data-testid="copy-roadmap-btn">⧉ Copy Roadmap</button>
-      <button class="action-btn" onclick="downloadRoadmap()" data-testid="download-roadmap-btn">↓ Download PDF</button>
-      <button class="action-btn" onclick="regenerateRoadmap()" data-testid="regenerate-roadmap-btn">↻ Regenerate</button>
-      <button class="action-btn danger" onclick="resetRoadmap()" data-testid="reset-roadmap-btn">✕ Reset</button>
-    </div>
-
-    <!-- Phases (filled by JS) -->
-    <div class="phases-wrap" id="phasesWrap" data-testid="phases-container"></div>
-
-    <!-- 4. Daily timetable -->
-    <div class="sub-section">
-      <h3 class="sub-title"><span class="sub-icon">⏱</span> Daily Timetable</h3>
-      <div class="timetable glass" id="timetableWrap" data-testid="timetable-container"></div>
-    </div>
-
-    <!-- 5. Free resources -->
-    <div class="sub-section">
-      <h3 class="sub-title"><span class="sub-icon">⚑</span> Free Resources</h3>
-      <div class="resources-grid" id="resourcesWrap" data-testid="resources-container"></div>
-    </div>
-
-    <!-- 6. Project ideas -->
-    <div class="sub-section">
-      <h3 class="sub-title"><span class="sub-icon">▲</span> Project Ideas</h3>
-      <div class="projects-grid" id="projectsWrap" data-testid="projects-container"></div>
-    </div>
-
-    <!-- 7. Expected final result -->
-    <div class="sub-section">
-      <h3 class="sub-title"><span class="sub-icon">★</span> Expected Final Result</h3>
-      <div class="results-grid" id="resultsWrap" data-testid="results-container"></div>
-      <p class="disclaimer" data-testid="disclaimer-text">
-        Result depends on your consistency, starting level, daily time, and quality of practice.
-      </p>
-    </div>
-  </section>
-
-  <!-- ABOUT THE CREATOR -->
-  <section class="about-section" id="about" data-testid="about-section">
-    <p class="section-eyebrow reveal">THE CREATOR</p>
-    <h2 class="section-title reveal">About Me</h2>
-    <div class="about-card glass reveal" data-testid="about-card">
-      <div class="about-photo-wrap">
-        <img src="creator.png" alt="Rishi Srivastav" class="about-photo" data-testid="creator-photo" />
-      </div>
-      <div class="about-content">
-        <h3 class="about-name" data-testid="creator-name">Rishi Srivastav</h3>
-        <p class="about-role">Creator of MasterRoadmaps</p>
-        <p class="about-text" data-testid="creator-words">
-          Hi, I'm Rishi — I built MasterRoadmaps because I believe anyone can make serious
-          progress in any skill with 30 days of focused, honest effort.
-          No shortcuts, no fake promises — just a clear plan, daily execution,
-          and real output at the end. If this roadmap helps you move even one step
-          forward, it has done its job. Now stop scrolling and start Day 1.
-        </p>
-        <p class="about-sign" data-testid="creator-sign">Rishi Srivastav</p>
-        <div class="connect-wrap">
-          <button class="connect-btn" onclick="connectWithMe()" data-testid="connect-btn">
-            ✉ &nbsp;Connect With Me
+        <!-- Sidebar Footer Action Links -->
+        <div class="pt-8 space-y-2 border-t-2 border-black mt-8 md:mt-0">
+          <div class="flex items-center justify-between text-xs px-2 py-1 font-bold">
+            <span class="flex items-center gap-2"><span>⚙</span> Settings</span>
+          </div>
+          <button class="w-full flex items-center gap-2 text-xs px-2 py-1 font-bold text-left hover:underline" onclick="resetRoadmap()" data-purpose="reset-link">
+            <span>🚪</span> Reset Session
           </button>
         </div>
-      </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto space-y-10">
+        
+        <!-- Top Action Bar -->
+        <header class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b-2 border-black" data-purpose="top-navigation-bar">
+          <div class="flex items-center gap-2">
+            <button class="w-8 h-8 border-retro bg-white shadow-hard-sm flex items-center justify-center font-bold text-sm btn-press" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+              ←
+            </button>
+            <span class="text-xs font-bold uppercase tracking-widest hidden sm:inline-block">Command Center</span>
+          </div>
+
+          <div class="flex items-center gap-3 flex-1 max-w-xl justify-end">
+            <!-- Search bar connects to skill input -->
+            <div class="relative w-full max-w-xs">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-xs">🔍</span>
+              <input
+                class="w-full pl-8 pr-3 py-1.5 text-xs bg-white border-retro shadow-hard-sm focus:outline-none focus:ring-0 focus:border-black font-mono placeholder:text-neutral-500"
+                placeholder="Find skills, trainers, resources..."
+                type="text"
+                onkeydown="if(event.key==='Enter'){ fillSkill(this.value); generateRoadmap(); }"
+              />
+            </div>
+            <!-- Notification bell -->
+            <button class="w-8 h-8 border-retro bg-white shadow-hard-sm flex items-center justify-center text-xs relative btn-press" onclick="showToast('Protocol active: 30-Day Extreme System')">
+              🔔
+              <span class="absolute -top-1 -right-1 w-3 h-3 bg-retroYellow border border-black rounded-full flex items-center justify-center text-[9px] font-bold">3</span>
+            </button>
+            <!-- User avatar -->
+            <div class="w-8 h-8 border-retro bg-retroPink shadow-hard-sm flex items-center justify-center overflow-hidden font-bold text-xs">
+              RS
+            </div>
+            <!-- Quick CTA -->
+            <a class="hidden lg:inline-block bg-retroYellow border-retro px-3 py-1.5 text-xs font-bold shadow-hard-sm btn-press hover:bg-retroYellowLight" href="#hero" data-testid="nav-cta-btn">
+              START DAY 1
+            </a>
+          </div>
+        </header>
+
+        <!-- 1. HERO & SKILL GENERATOR SECTION -->
+        <section class="space-y-6" id="hero" data-purpose="hero-mission-generator">
+          <div class="space-y-3">
+            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 bg-black text-white text-[11px] font-mono border-retro uppercase tracking-wider" data-testid="hero-badge">
+              ⚡ 30-Day Extreme Learning System
+            </div>
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-none font-mono" data-testid="hero-title">
+              Master Any Skill <br/>
+              <span class="inline-block bg-retroYellow px-3 py-1 mt-1 border-retro shadow-hard text-black">
+                In 30 Days
+              </span>
+            </h1>
+            <p class="text-xs sm:text-sm font-mono max-w-2xl text-neutral-800 pt-1" data-testid="hero-subtitle">
+              Get an extreme 30-day roadmap, daily timetable, free resources, project ideas, and realistic final outcomes for any skill. Built for students, working professionals, and self-learners.
+            </p>
+          </div>
+
+          <!-- Mission Input Box Form -->
+          <div class="border-retro bg-white p-4 sm:p-6 shadow-hard space-y-4" data-testid="generator-card">
+            <div class="space-y-2">
+              <label for="skillInput" class="block text-xs uppercase font-bold tracking-wider font-mono">
+                🎯 Target Skill Mission
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-base">🔍</span>
+                <input
+                  type="text"
+                  id="skillInput"
+                  data-testid="skill-input"
+                  class="w-full pl-9 pr-10 py-2.5 text-sm sm:text-base font-bold font-mono border-retro shadow-hard-sm focus:outline-none focus:ring-0 focus:border-black bg-cream-canvas"
+                  placeholder="Type a skill, e.g. magic, coding, video editing…"
+                  autocomplete="off"
+                />
+                <button
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center font-bold text-sm text-neutral-500 hover:text-black"
+                  onclick="skillInput.value=''; skillInput.focus();"
+                  title="Clear input"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <!-- Intensity Selector -->
+            <div class="space-y-2 pt-1">
+              <label class="block text-xs uppercase font-bold tracking-wider font-mono">
+                ⚡ Intensity Protocol:
+              </label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" role="radiogroup" aria-label="Daily intensity">
+                <button class="intensity-btn" data-value="1 hour/day" data-testid="intensity-1h">1 hour / day</button>
+                <button class="intensity-btn active" data-value="2 hours/day" data-testid="intensity-2h">2 hours / day</button>
+                <button class="intensity-btn" data-value="4 hours/day" data-testid="intensity-4h">4 hours / day</button>
+                <button class="intensity-btn" data-value="4 hours/day Extreme" data-testid="intensity-extreme">⚡ Extreme</button>
+              </div>
+            </div>
+
+            <!-- Generate CTA & Loader -->
+            <div class="pt-3 flex flex-col sm:flex-row items-center gap-4">
+              <button class="generate-btn w-full sm:w-auto" id="generateBtn" data-testid="generate-btn" onclick="generateRoadmap()">
+                <span class="btn-text">⚡ Generate My Roadmap</span>
+                <span class="btn-loader" aria-hidden="true"></span>
+              </button>
+              <div class="text-[11px] font-mono text-neutral-700 flex flex-wrap items-center gap-2" data-testid="trust-text">
+                <span>• Instant output</span>
+                <span>• 30-day timetable</span>
+                <span>• Free curriculum</span>
+              </div>
+            </div>
+
+            <!-- Warning Message for Empty Input -->
+            <div class="warning-msg" id="warningMsg" data-testid="warning-msg">⚠ Please enter a skill first.</div>
+
+            <!-- Popular Quick Tags -->
+            <div class="pt-3 border-t-2 border-black flex flex-wrap items-center gap-2 text-xs" data-testid="skill-chips">
+              <span class="font-bold text-[11px] uppercase tracking-wider">Popular Missions:</span>
+              <button class="px-2 py-1 border-retro bg-cream-canvas text-[11px] font-mono hover:bg-retroYellow cursor-pointer btn-press" onclick="fillSkill('Web Development')" data-testid="chip-web-development">Web Development</button>
+              <button class="px-2 py-1 border-retro bg-cream-canvas text-[11px] font-mono hover:bg-retroYellow cursor-pointer btn-press" onclick="fillSkill('Video Editing')" data-testid="chip-video-editing">Video Editing</button>
+              <button class="px-2 py-1 border-retro bg-cream-canvas text-[11px] font-mono hover:bg-retroYellow cursor-pointer btn-press" onclick="fillSkill('Excel')" data-testid="chip-excel">Excel</button>
+              <button class="px-2 py-1 border-retro bg-cream-canvas text-[11px] font-mono hover:bg-retroYellow cursor-pointer btn-press" onclick="fillSkill('Public Speaking')" data-testid="chip-public-speaking">Public Speaking</button>
+              <button class="px-2 py-1 border-retro bg-cream-canvas text-[11px] font-mono hover:bg-retroYellow cursor-pointer btn-press" onclick="fillSkill('Magic')" data-testid="chip-magic">Magic</button>
+              <button class="px-2 py-1 border-retro bg-cream-canvas text-[11px] font-mono hover:bg-retroYellow cursor-pointer btn-press" onclick="fillSkill('Graphic Design')" data-testid="chip-graphic-design">Graphic Design</button>
+              <button class="px-2 py-1 border-retro bg-cream-canvas text-[11px] font-mono hover:bg-retroYellow cursor-pointer btn-press" onclick="fillSkill('AI Tools')" data-testid="chip-ai-tools">AI Tools</button>
+              <button class="px-2 py-1 border-retro bg-cream-canvas text-[11px] font-mono hover:bg-retroYellow cursor-pointer btn-press" onclick="fillSkill('Fitness')" data-testid="chip-fitness">Fitness</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. SYSTEM LEAD & ARCHITECTURE (ABOUT THE CREATOR) -->
+        <section class="space-y-4" id="creator" data-purpose="creator-profile-section" data-testid="about-section">
+          <div class="flex items-center justify-between">
+            <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-tight font-mono">System Lead &amp; Architecture</h2>
+            <span class="text-xs font-bold uppercase tracking-wider font-mono">The Creator</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- Main Lead Card -->
+            <div class="lg:col-span-8 bg-retroYellow border-retro p-5 sm:p-7 shadow-hard flex flex-col md:flex-row gap-6" data-testid="about-card">
+              <!-- Portrait Container -->
+              <div class="w-full md:w-52 flex-shrink-0 flex flex-col items-center">
+                <div class="w-44 h-48 sm:w-48 sm:h-52 border-retro bg-cream-canvas shadow-hard-sm relative overflow-hidden flex items-center justify-center">
+                  <img src="creator.png" alt="Rishi Srivastav" class="w-full h-full object-cover" data-testid="creator-photo" />
+                  <span class="absolute top-2 left-2 px-1.5 py-0.5 bg-black text-white text-[9px] font-mono uppercase">VERIFIED</span>
+                </div>
+              </div>
+
+              <!-- Info Details & Meta -->
+              <div class="flex-1 flex flex-col justify-between space-y-4">
+                <div>
+                  <div class="flex items-start justify-between flex-wrap gap-2">
+                    <div>
+                      <h3 class="text-2xl font-black uppercase tracking-tight font-mono" data-testid="creator-name">Rishi Srivastav</h3>
+                      <p class="text-xs font-mono text-neutral-800" data-testid="creator-role">creator@masterroadmaps.site</p>
+                    </div>
+                    <!-- Social Links -->
+                    <div class="flex items-center gap-1.5">
+                      <button aria-label="Connect Email" class="w-7 h-7 border-retro bg-white flex items-center justify-center text-xs font-bold shadow-hard-sm hover:bg-cream-canvas btn-press" onclick="connectWithMe()">✉</button>
+                      <button aria-label="Copy Email" class="w-7 h-7 border-retro bg-white flex items-center justify-center text-xs font-bold shadow-hard-sm hover:bg-cream-canvas btn-press" onclick="copyEmail()">⧉</button>
+                    </div>
+                  </div>
+
+                  <!-- 4-Block Stat Badges -->
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 my-4">
+                    <div class="border-retro bg-cream-canvas p-2 text-center shadow-hard-sm">
+                      <div class="text-lg font-black font-mono leading-none">30 D</div>
+                      <div class="text-[10px] uppercase font-bold text-neutral-700 tracking-tighter">Timeline</div>
+                    </div>
+                    <div class="border-retro bg-cream-canvas p-2 text-center shadow-hard-sm">
+                      <div class="text-lg font-black font-mono leading-none">#1</div>
+                      <div class="text-[10px] uppercase font-bold text-neutral-700 tracking-tighter">Extreme Engine</div>
+                    </div>
+                    <div class="border-retro bg-cream-canvas p-2 text-center shadow-hard-sm">
+                      <div class="text-lg font-black font-mono leading-none">100%</div>
+                      <div class="text-[10px] uppercase font-bold text-neutral-700 tracking-tighter">Free Curricula</div>
+                    </div>
+                    <div class="border-retro bg-cream-canvas p-2 text-center shadow-hard-sm">
+                      <div class="text-lg font-black font-mono leading-none">3 PoC</div>
+                      <div class="text-[10px] uppercase font-bold text-neutral-700 tracking-tighter">Ship Targets</div>
+                    </div>
+                  </div>
+
+                  <!-- Bio Quote -->
+                  <p class="text-xs leading-relaxed font-mono text-neutral-900" data-testid="creator-words">
+                    "I built MasterRoadmaps because I believe anyone can make serious progress in any skill with 30 days of focused, honest effort. No shortcuts, no fake promises — just a clear plan, daily execution, and real output at the end."
+                  </p>
+                </div>
+
+                <!-- Card Bottom Buttons -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                  <button class="border-retro bg-black text-white py-2 px-3 text-xs font-bold uppercase tracking-wider shadow-hard-sm btn-press flex items-center justify-center gap-2 hover:bg-neutral-800" onclick="connectWithMe()" data-testid="connect-btn">
+                    <span>✉</span> Connect With Me
+                  </button>
+                  <a class="border-retro bg-white text-black py-2 px-3 text-xs font-bold uppercase tracking-wider shadow-hard-sm btn-press flex items-center justify-center gap-2 hover:bg-cream-canvas" href="#hero">
+                    <span>◈</span> System Manifesto
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Execution Frameworks -->
+            <div class="lg:col-span-4 space-y-3" data-purpose="work-experience-stack">
+              <h3 class="text-lg font-black uppercase tracking-tight font-mono pb-1 border-b-2 border-black">
+                Execution Frameworks
+              </h3>
+              <!-- Item 1 -->
+              <div class="border-retro bg-white p-3 shadow-hard-sm flex items-start gap-3">
+                <div class="w-9 h-9 border-retro bg-cream-canvas flex-shrink-0 flex items-center justify-center font-bold text-sm shadow-hard-sm">
+                  💼
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-black uppercase truncate font-mono">Extreme Speedrun Engine</div>
+                  <div class="text-[11px] text-neutral-700 font-mono">MasterRoadmaps Core</div>
+                  <div class="text-[10px] text-neutral-500 font-mono mt-0.5">30-Day Protocol • Active</div>
+                </div>
+              </div>
+              <!-- Item 2 -->
+              <div class="border-retro bg-white p-3 shadow-hard-sm flex items-start gap-3">
+                <div class="w-9 h-9 border-retro bg-cream-canvas flex-shrink-0 flex items-center justify-center font-bold text-sm shadow-hard-sm">
+                  🛠
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-black uppercase truncate font-mono">Full-Stack Curriculum</div>
+                  <div class="text-[11px] text-neutral-700 font-mono">Open Source Cohorts</div>
+                  <div class="text-[10px] text-neutral-500 font-mono mt-0.5">4,800+ Students Deployed</div>
+                </div>
+              </div>
+              <!-- Item 3 -->
+              <div class="border-retro bg-white p-3 shadow-hard-sm flex items-start gap-3">
+                <div class="w-9 h-9 border-retro bg-cream-canvas flex-shrink-0 flex items-center justify-center font-bold text-sm shadow-hard-sm">
+                  ⚡
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-black uppercase truncate font-mono">Zero-Fluff Daily Audits</div>
+                  <div class="text-[11px] text-neutral-700 font-mono">Daily Schedule Parser</div>
+                  <div class="text-[10px] text-neutral-500 font-mono mt-0.5">Automated Task Verification</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. THE SYSTEM: HOW IT WORKS -->
+        <section class="space-y-4" id="how-it-works" data-purpose="how-it-works-section">
+          <div class="border-b-2 border-black pb-2 flex flex-wrap items-baseline justify-between gap-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-widest font-mono text-neutral-600 block">THE SYSTEM</span>
+              <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-tight font-mono">How It Works</h2>
+            </div>
+            <span class="text-xs font-mono text-neutral-700 max-w-sm">
+              Three uncompromising phases designed to eliminate cognitive friction and convert pure focus into demonstrable masterwork.
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Step 1 -->
+            <div class="border-retro bg-white p-5 shadow-hard space-y-3" data-testid="how-card-1">
+              <div class="flex justify-between items-center">
+                <span class="text-3xl font-black font-mono">01</span>
+                <span class="w-8 h-8 border-retro bg-cream-canvas flex items-center justify-center text-sm shadow-hard-sm">⌨</span>
+              </div>
+              <h3 class="text-base font-black uppercase font-mono">Type Any Skill</h3>
+              <p class="text-xs text-neutral-700 font-mono leading-relaxed">
+                Enter whatever you want to learn, from full-stack coding to public speaking or data analysis.
+              </p>
+              <div class="pt-2 text-[10px] font-mono font-bold uppercase text-neutral-500 border-t border-neutral-300">
+                • Input latency: &lt;100ms
+              </div>
+            </div>
+            <!-- Step 2 -->
+            <div class="border-retro bg-white p-5 shadow-hard space-y-3" data-testid="how-card-2">
+              <div class="flex justify-between items-center">
+                <span class="text-3xl font-black font-mono">02</span>
+                <span class="w-8 h-8 border-retro bg-cream-canvas flex items-center justify-center text-sm shadow-hard-sm">🗺</span>
+              </div>
+              <h3 class="text-base font-black uppercase font-mono">Get A 30-Day Plan</h3>
+              <p class="text-xs text-neutral-700 font-mono leading-relaxed">
+                Receive a focused roadmap divided into phases, daily practice blocks, and capstone tasks.
+              </p>
+              <div class="pt-2 text-[10px] font-mono font-bold uppercase text-neutral-500 border-t border-neutral-300">
+                • 30 actionable nodes
+              </div>
+            </div>
+            <!-- Step 3 -->
+            <div class="border-retro bg-white p-5 shadow-hard space-y-3" data-testid="how-card-3">
+              <div class="flex justify-between items-center">
+                <span class="text-3xl font-black font-mono">03</span>
+                <span class="w-8 h-8 border-retro bg-cream-canvas flex items-center justify-center text-sm shadow-hard-sm">🏆</span>
+              </div>
+              <h3 class="text-base font-black uppercase font-mono">Build Real Output</h3>
+              <p class="text-xs text-neutral-700 font-mono leading-relaxed">
+                Follow the plan and finish with practical, public git repositories and visible production apps.
+              </p>
+              <div class="pt-2 text-[10px] font-mono font-bold uppercase text-neutral-500 border-t border-neutral-300">
+                • Portfolio verified
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. ROADMAP MANIFEST / RESULT SECTION (Initially hidden until generated) -->
+        <section class="result-section space-y-6 pt-4 border-t-2 border-black" id="resultSection" data-testid="result-section">
+          <!-- Plan Header with Controls -->
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-widest font-mono text-neutral-600">ROADMAP MANIFEST</span>
+              <div class="flex flex-wrap items-center gap-2 mt-1">
+                <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-tight font-mono">Your Personal Plan</h2>
+                <span class="bg-retroYellow border-retro px-2 py-0.5 text-xs font-black shadow-hard-sm font-mono" id="resultIntensity" data-testid="result-intensity"></span>
+                <span class="bg-black text-white border-retro px-2 py-0.5 text-xs font-bold font-mono">30 DAYS</span>
+                <span class="bg-retroPink border-retro px-2 py-0.5 text-xs font-black shadow-hard-sm font-mono uppercase" id="resultSkill" data-testid="result-skill-name"></span>
+                <span class="border-retro bg-white px-2 py-0.5 text-xs font-mono font-bold shadow-hard-sm uppercase" id="resultMode" data-testid="result-mode"></span>
+              </div>
+              <p class="motivation-line text-xs font-mono text-neutral-800 mt-2 max-w-2xl" id="motivationLine" data-testid="motivation-line"></p>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex flex-wrap items-center gap-2 text-xs" data-testid="action-buttons">
+              <button class="border-retro bg-white px-3 py-1.5 font-bold shadow-hard-sm btn-press flex items-center gap-1.5" onclick="copyRoadmap()" data-testid="copy-roadmap-btn">
+                <span>⧉</span> Copy Roadmap
+              </button>
+              <button class="border-retro bg-retroYellow px-3 py-1.5 font-bold shadow-hard-sm btn-press flex items-center gap-1.5" onclick="downloadRoadmap()" data-testid="download-roadmap-btn">
+                <span>↓</span> Download PDF
+              </button>
+              <button class="border-retro bg-white px-3 py-1.5 font-bold shadow-hard-sm btn-press flex items-center gap-1.5" onclick="regenerateRoadmap()" data-testid="regenerate-roadmap-btn">
+                <span>↻</span> Regenerate
+              </button>
+              <button class="border-retro bg-white px-3 py-1.5 font-bold shadow-hard-sm btn-press flex items-center gap-1.5 text-red-600" onclick="resetRoadmap()" data-testid="reset-roadmap-btn">
+                <span>✕</span> Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Retro 30-Day Progress Stepper Track -->
+          <div class="border-retro bg-white p-4 shadow-hard overflow-x-auto" data-purpose="milestone-stepper">
+            <div class="min-w-[650px] flex items-center justify-between relative py-2">
+              <div class="absolute left-4 right-4 top-1/2 -translate-y-1/2 h-[2px] bg-black z-0"></div>
+              <div class="relative z-10 flex flex-col items-center gap-1 bg-white px-2">
+                <span class="w-7 h-7 rounded-full bg-mint-frame border-retro flex items-center justify-center text-xs font-bold shadow-hard-sm">✓</span>
+                <span class="text-[10px] font-mono font-bold uppercase">D1</span>
+              </div>
+              <div class="relative z-10 flex flex-col items-center gap-1 bg-white px-2">
+                <span class="w-7 h-7 rounded-full bg-mint-frame border-retro flex items-center justify-center text-xs font-bold shadow-hard-sm">✓</span>
+                <span class="text-[10px] font-mono font-bold uppercase">D2</span>
+              </div>
+              <div class="relative z-10 flex flex-col items-center gap-1 bg-white px-2">
+                <span class="w-7 h-7 rounded-full bg-mint-frame border-retro flex items-center justify-center text-xs font-bold shadow-hard-sm">✓</span>
+                <span class="text-[10px] font-mono font-bold uppercase">D3</span>
+              </div>
+              <div class="relative z-10 flex flex-col items-center gap-1 bg-white px-2">
+                <span class="w-8 h-8 rounded-full bg-retroYellow border-retro flex items-center justify-center text-xs font-black shadow-hard-sm scale-110">04</span>
+                <span class="text-[10px] font-mono font-black uppercase text-black bg-retroYellow px-1 border border-black">TODAY</span>
+              </div>
+              <div class="relative z-10 flex flex-col items-center gap-1 bg-white px-2">
+                <span class="w-7 h-7 rounded-full bg-cream-canvas border-retro flex items-center justify-center text-xs font-mono font-bold shadow-hard-sm">07</span>
+                <span class="text-[10px] font-mono font-bold uppercase text-neutral-600">Phase 1</span>
+              </div>
+              <div class="relative z-10 flex flex-col items-center gap-1 bg-white px-2">
+                <span class="w-7 h-7 rounded-full bg-cream-canvas border-retro flex items-center justify-center text-xs font-mono font-bold shadow-hard-sm">14</span>
+                <span class="text-[10px] font-mono font-bold uppercase text-neutral-600">Build</span>
+              </div>
+              <div class="relative z-10 flex flex-col items-center gap-1 bg-white px-2">
+                <span class="w-7 h-7 rounded-full bg-cream-canvas border-retro flex items-center justify-center text-xs font-mono font-bold shadow-hard-sm">21</span>
+                <span class="text-[10px] font-mono font-bold uppercase text-neutral-600">Deploy</span>
+              </div>
+              <div class="relative z-10 flex flex-col items-center gap-1 bg-white px-2">
+                <span class="w-7 h-7 rounded-full bg-retroPink border-retro flex items-center justify-center text-xs font-bold shadow-hard-sm">🏆</span>
+                <span class="text-[10px] font-mono font-bold uppercase text-neutral-600">Mastery</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phases Wrap (Filled by JS) -->
+          <div class="space-y-3">
+            <h3 class="text-base font-black uppercase font-mono flex items-center gap-2">
+              <span>🗺</span> 4-Phase Curriculum
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="phasesWrap" data-testid="phases-container"></div>
+          </div>
+
+          <!-- Dual Column Grid: Timetable & Free Resources -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Daily Timetable Card -->
+            <div class="border-retro bg-retroPink p-5 shadow-hard space-y-4" data-purpose="daily-timetable-container">
+              <div class="flex items-center justify-between border-b-2 border-black pb-2">
+                <h3 class="text-base font-black uppercase font-mono flex items-center gap-2">
+                  <span>⏱</span> Daily Timetable
+                </h3>
+                <span class="text-xs bg-black text-white px-2 py-0.5 font-bold font-mono">TIMETABLE BLOCKS</span>
+              </div>
+              <div class="space-y-3" id="timetableWrap" data-testid="timetable-container"></div>
+              <div class="pt-1 flex items-center justify-between text-[11px] font-mono font-bold">
+                <span>Schedule Rigidity: 92%</span>
+                <span class="bg-black text-white px-2 py-0.5">Streak Bonus: +150 XP</span>
+              </div>
+            </div>
+
+            <!-- Free Resources Card -->
+            <div class="border-retro bg-white p-5 shadow-hard space-y-4" id="resources" data-purpose="free-resources-container">
+              <div class="flex items-center justify-between border-b-2 border-black pb-2">
+                <h3 class="text-base font-black uppercase font-mono flex items-center gap-2">
+                  <span>⚑</span> Free Resources
+                </h3>
+                <span class="text-xs bg-retroYellow border-retro px-2 py-0.5 font-bold font-mono">VERIFIED FREE</span>
+              </div>
+              <div class="space-y-3" id="resourcesWrap" data-testid="resources-container"></div>
+              <div class="pt-1 flex items-center justify-between text-[11px] font-mono font-bold">
+                <span>Curated Materials</span>
+                <span class="text-black">100% Free Forever</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dual Column Grid: Project Ideas & Expected Final Result -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Project Ideas (7 Cols) -->
+            <div class="lg:col-span-7 border-retro bg-white p-5 shadow-hard space-y-4" id="projects" data-purpose="project-ideas-card">
+              <div class="flex items-center justify-between border-b-2 border-black pb-2">
+                <h3 class="text-base font-black uppercase font-mono flex items-center gap-2">
+                  <span>▲</span> Project Ideas
+                </h3>
+                <span class="text-xs bg-cream-canvas border-retro px-2 py-0.5 font-bold font-mono">PORTFOLIO OUTPUT</span>
+              </div>
+              <div class="space-y-3" id="projectsWrap" data-testid="projects-container"></div>
+              <div class="text-[11px] font-mono flex items-center justify-between font-bold pt-1">
+                <span>Verification: GitHub Public Repos</span>
+                <span>Practical Proof of Work</span>
+              </div>
+            </div>
+
+            <!-- Expected Final Result & Metrics (5 Cols) -->
+            <div class="lg:col-span-5 border-retro bg-cream-canvas p-5 shadow-hard space-y-4" data-purpose="expected-result-card">
+              <div class="flex items-center justify-between border-b-2 border-black pb-2">
+                <h3 class="text-base font-black uppercase font-mono flex items-center gap-2">
+                  <span>★</span> Expected Final Result
+                </h3>
+                <span class="text-xs bg-white border-retro px-2 py-0.5 font-bold font-mono">HONEST METRICS</span>
+              </div>
+
+              <!-- Result Tiers rendered by JS -->
+              <div class="space-y-3" id="resultsWrap" data-testid="results-container"></div>
+
+              <!-- Disclaimer Quote -->
+              <div class="border-retro bg-white p-3 shadow-hard-sm">
+                <p class="text-xs italic font-mono text-neutral-800" data-testid="disclaimer-text">
+                  "Result depends on your consistency, starting level, daily time, and quality of practice."
+                </p>
+              </div>
+
+              <!-- Visual Metric Sliders -->
+              <div class="space-y-3 pt-1">
+                <div>
+                  <div class="flex justify-between text-xs font-mono font-bold mb-1">
+                    <span>Practical Problem Solving</span>
+                    <span>85% (Junior Ready)</span>
+                  </div>
+                  <div class="w-full h-3 border-retro bg-white overflow-hidden">
+                    <div class="h-full bg-retroYellow" style="width: 85%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs font-mono font-bold mb-1">
+                    <span>Architectural Intuition</span>
+                    <span>70% (Competent)</span>
+                  </div>
+                  <div class="w-full h-3 border-retro bg-white overflow-hidden">
+                    <div class="h-full bg-mint-frame" style="width: 70%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs font-mono font-bold mb-1">
+                    <span>Execution Speed</span>
+                    <span>90% (Speedrunner)</span>
+                  </div>
+                  <div class="w-full h-3 border-retro bg-white overflow-hidden">
+                    <div class="h-full bg-retroPink" style="width: 90%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t-2 border-black pt-3 flex items-center justify-between text-[11px] font-mono font-bold">
+                <span>Zero fluff doctrine</span>
+                <span>Reality-Tested</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. STUDENTS REVIEWS SECTION -->
+        <section class="space-y-4 pt-4 border-t-2 border-black" data-purpose="student-reviews-row">
+          <div class="flex items-center justify-between">
+            <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-tight font-mono">Students Reviews</h2>
+            <button class="border-retro bg-white px-3 py-1 text-xs font-bold font-mono shadow-hard-sm hover:bg-cream-canvas btn-press" onclick="showToast('Showing verified student reviews')">View all</button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <!-- Review Overview Card -->
+            <div class="md:col-span-4 border-retro bg-retroPink p-4 shadow-hard flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between border-b-2 border-black pb-2">
+                  <div class="text-xl font-black font-mono">★ 4.4 / 5.0</div>
+                  <button class="border-retro bg-white text-[10px] font-bold px-2 py-0.5 shadow-hard-sm btn-press" onclick="showToast('Overall satisfaction: 94%')">See stats</button>
+                </div>
+                <div class="mt-4">
+                  <div class="text-2xl font-black font-mono leading-none">127</div>
+                  <div class="text-[11px] font-mono text-neutral-800">rates from students</div>
+                </div>
+              </div>
+              <div class="pt-4">
+                <svg class="w-full h-12 stroke-black fill-none stroke-[2.5]" viewBox="0 0 200 40">
+                  <path d="M 0,35 Q 20,5 40,25 T 80,15 T 120,30 T 160,10 T 200,20"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Student Review 1: Nicol W. -->
+            <div class="md:col-span-3 border-retro bg-white p-4 shadow-hard flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between border-b border-neutral-300 pb-1.5">
+                  <div>
+                    <div class="text-xs font-black font-mono">Nicol W.</div>
+                    <div class="text-[10px] text-neutral-600 font-mono">Junior JavaScript Dev.</div>
+                  </div>
+                  <div class="text-xs font-black font-mono">⭐ 4.6</div>
+                </div>
+                <p class="text-[11px] font-mono text-neutral-800 mt-2 leading-relaxed">
+                  "The progress I have made since starting to use is immense! I can study for short periods or long periods at my own convenience - mostly late in the evenings."
+                </p>
+              </div>
+            </div>
+
+            <!-- Student Review 2: Stephanie N. -->
+            <div class="md:col-span-3 border-retro bg-white p-4 shadow-hard flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between border-b border-neutral-300 pb-1.5">
+                  <div>
+                    <div class="text-xs font-black font-mono">Stephanie N.</div>
+                    <div class="text-[10px] text-neutral-600 font-mono">Middle JavaScript Dev.</div>
+                  </div>
+                  <div class="text-xs font-black font-mono">⭐ 4.7</div>
+                </div>
+                <p class="text-[11px] font-mono text-neutral-800 mt-2 leading-relaxed">
+                  "I felt like I learned months in a week. I love how she uses learning by practice and gives great challenges to help the learner to understand a new concept and subject."
+                </p>
+              </div>
+            </div>
+
+            <!-- Student Review 3: Vane F. -->
+            <div class="md:col-span-2 border-retro bg-white p-4 shadow-hard flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between border-b border-neutral-300 pb-1.5">
+                  <div>
+                    <div class="text-xs font-black font-mono">Vane F.</div>
+                    <div class="text-[10px] text-neutral-600 font-mono">Junior Dev.</div>
+                  </div>
+                  <div class="text-xs font-black font-mono">⭐ 4.3</div>
+                </div>
+                <p class="text-[11px] font-mono text-neutral-800 mt-2 leading-relaxed">
+                  "Brilliant learning experience. Very interactive. Literally a game changer."
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. OFFLINE EXECUTION (UNLOCK PDF PROMPT CARD) -->
+        <section class="pt-6 border-t-2 border-black" id="pdf-download" data-purpose="pdf-unlock-card">
+          <div class="border-retro bg-white p-6 sm:p-8 shadow-hard max-w-2xl mx-auto text-center space-y-4">
+            <div class="w-12 h-12 mx-auto border-retro bg-retroYellow flex items-center justify-center text-xl shadow-hard-sm">
+              🔒
+            </div>
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-widest font-mono text-neutral-600">OFFLINE EXECUTION</span>
+              <h3 class="text-2xl sm:text-3xl font-black uppercase tracking-tight font-mono mt-1">Unlock Your PDF</h3>
+              <p class="text-xs font-mono text-neutral-700 max-w-md mx-auto mt-1">
+                Enter your mobile number to download the complete 30-day roadmap as a print-ready PDF. India numbers only.
+              </p>
+            </div>
+            <!-- Quick unlock CTA triggers downloadRoadmap() directly -->
+            <button class="bg-retroYellow border-retro py-3 px-6 text-xs sm:text-sm font-black uppercase tracking-wider shadow-hard btn-press hover:bg-retroYellowLight inline-flex items-center justify-center gap-2" onclick="downloadRoadmap()">
+              <span>⚡</span> Unlock &amp; Download PDF
+            </button>
+            <div class="text-[10px] font-mono text-neutral-600 flex items-center justify-center gap-1.5 pt-1">
+              <span>🛡</span> We only use your number to know who's using MasterRoadmaps. No spam.
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. MOTIVATIONAL BANNER -->
+        <section class="border-retro bg-retroYellow p-6 text-center shadow-hard space-y-2" data-purpose="footer-manifesto-banner">
+          <div class="text-xs font-mono uppercase font-bold tracking-widest text-neutral-800">◆ MASTERROADMAPS ◆</div>
+          <h2 class="text-xl sm:text-2xl md:text-3xl font-black uppercase font-mono tracking-tight">
+            Make Maximum Progress In 30 Days. <br class="hidden sm:inline"/>No Excuses, Only Execution.
+          </h2>
+          <p class="text-xs font-mono text-neutral-800">
+            Built for students, working professionals, and self-directed autodidacts.
+          </p>
+        </section>
+
+        <!-- 8. PAGE FOOTER -->
+        <footer class="pt-6 border-t-2 border-black flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-neutral-700" data-testid="footer" data-purpose="main-footer">
+          <div class="flex items-center gap-2">
+            <span class="bg-black text-white px-1.5 py-0.5 text-[10px] font-bold border border-black">&lt;/&gt;</span>
+            <span class="font-bold">MASTERROADMAPS</span>
+            <span class="text-[11px]">© 2026. Built for 30-Day Speedrunners.</span>
+          </div>
+          <div class="flex items-center gap-4 text-[11px] font-bold">
+            <a class="hover:underline" href="#hero">Privacy</a>
+            <a class="hover:underline" href="#hero">Terms</a>
+            <a class="hover:underline" href="#hero">Terminal</a>
+            <a class="hover:underline" href="#hero">Back to Top ↑</a>
+          </div>
+        </footer>
+
+      </main>
     </div>
-  </section>
+  </div>
 
-  <!-- 11. FOOTER -->
-  <footer class="footer" data-testid="footer">
-    <div class="footer-logo"><span class="logo-mark">◆</span> Master<span class="logo-accent">Roadmaps</span></div>
-    <p class="footer-main">MasterRoadmaps — Built for students, workers, and self-learners.</p>
-    <p class="footer-small">Make maximum progress in 30 days. No excuses, only execution.</p>
-  </footer>
-
-  <!-- Toast notification -->
+  <!-- Toast Notification -->
   <div class="toast" id="toast" data-testid="toast"></div>
 
-  <!-- Phone login modal (gates the PDF download) -->
+  <!-- Phone Login Modal (Gates PDF Download) -->
   <div class="modal-overlay" id="phoneModal" data-testid="phone-modal">
-    <div class="modal-card glass">
+    <div class="modal-card">
       <button class="modal-close" onclick="closePhoneModal()" data-testid="phone-modal-close">✕</button>
-      <div class="modal-icon">🔒</div>
-      <h3 class="modal-title">Unlock Your PDF</h3>
-      <p class="modal-sub">Enter your mobile number to download the roadmap as a PDF. India numbers only.</p>
-      <div class="phone-input-row">
-        <span class="phone-prefix">+91</span>
+      <div class="w-12 h-12 border-retro bg-retroYellow flex items-center justify-center text-xl shadow-hard-sm mb-3">
+        🔒
+      </div>
+      <span class="text-[10px] font-bold uppercase tracking-widest font-mono text-neutral-600 block">OFFLINE ACCESS</span>
+      <h3 class="text-xl font-black uppercase font-mono tracking-tight mt-1">Unlock Your PDF</h3>
+      <p class="text-xs font-mono text-neutral-700 mt-1 mb-4">
+        Enter your mobile number to download the roadmap as a PDF. India numbers only (+91).
+      </p>
+      <div class="flex border-retro shadow-hard-sm bg-cream-canvas">
+        <span class="inline-flex items-center px-3 border-r-2 border-black bg-neutral-100 font-mono text-xs font-bold">
+          +91
+        </span>
         <input
           type="tel"
           id="phoneInput"
@@ -228,16 +753,18 @@
           placeholder="10-digit mobile number"
           maxlength="10"
           inputmode="numeric"
+          class="flex-1 py-2 px-3 text-xs sm:text-sm font-mono bg-transparent border-0 focus:ring-0 focus:outline-none"
         />
       </div>
       <div class="phone-error" id="phoneError" data-testid="phone-error">Please enter a valid Indian mobile number.</div>
-      <button class="generate-btn modal-submit" id="phoneSubmitBtn" onclick="submitPhone()" data-testid="phone-submit-btn">
-        <span class="btn-text">Unlock &amp; Download PDF</span>
+      <button class="generate-btn w-full mt-4 py-2.5 text-xs font-bold" id="phoneSubmitBtn" onclick="submitPhone()" data-testid="phone-submit-btn">
+        <span class="btn-text">⚡ Unlock &amp; Download PDF</span>
       </button>
-      <p class="modal-note">We only use your number to know who's using MasterRoadmaps. No spam.</p>
+      <p class="text-[10px] font-mono text-neutral-500 mt-3">We only use your number to know who's using MasterRoadmaps. No spam.</p>
     </div>
   </div>
 
+  <!-- jsPDF & Application Logic -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="script.js"></script>
 </body>
